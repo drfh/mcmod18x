@@ -1,0 +1,12 @@
+*.class
+*.png
+*.cfg
+*.lzma
+*.properties
+forge_logo.png
+mcpmod.info
+CodecIBXM.java
+# Package Files #
+*.jar
+*.war
+*.ear
