@@ -1,6 +1,7 @@
 package ruby.bamboo.core;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import ruby.bamboo.core.BambooData;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -23,7 +25,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class DataLoader extends ClassFinder {
 
-	private static final HashMap<Class<? extends Block>, String> classToNameMap=new HashMap<Class<? extends Block>, String>();
+	private static final HashMap<Class<? extends Block>, String> classToNameMap = new HashMap<Class<? extends Block>, String>();
 	public static final DataLoader instance = new DataLoader();
 
 	private DataLoader() {
@@ -48,7 +50,15 @@ public class DataLoader extends ClassFinder {
 		}
 		for (IData data : rsltList) {
 			try {
-				Object instance = Class.forName(data.getClazz().getName()).newInstance();
+				// マテリアルを持つコンストラクタはアノテーションでしたマテリアルで初期化する(継承対策)
+				Class c = Class.forName(data.getClazz().getName());
+				Constructor cnst = c.getConstructor(Material.class);
+				Object instance = null;
+				if (cnst != null) {
+					instance = cnst.newInstance(((BambooData) c.getAnnotation(BambooData.class)).material().MATERIAL);
+				} else {
+					instance = c.newInstance();
+				}
 				if (instance instanceof Block) {
 					registInstance((Block) instance, data.getName(), data.getItemBlock(), data.getCreativeTab());
 				} else if (instance instanceof Item) {
@@ -68,7 +78,8 @@ public class DataLoader extends ClassFinder {
 	public static String getModdedName(Class clazz) {
 		return BambooCore.MODID + Constants.DMAIN_SEPARATE + getName(clazz);
 	}
-	public static Collection<String> getRegstedNameList(){
+
+	public static Collection<String> getRegstedNameList() {
 		return classToNameMap.values();
 	}
 

@@ -8,18 +8,27 @@ import java.lang.annotation.Target;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface BambooData {
-		@Nullable
-		String name() default Constants.STR_EMPTY;
-		
-		@Nonnull
-		Class<? extends ItemBlock> itemBlock() default ItemBlock.class;
+	/**
+	 * 空白は自動的にクラス名を小文字化したものになる
+	 * @return
+	 */
+	@Nonnull
+	String name() default Constants.STR_EMPTY;
+
+	@Nonnull
+	EnumMaterial material() default EnumMaterial.GROUND;
 	
-		@Nonnull
-		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
+	@Nonnull
+	Class<? extends ItemBlock> itemBlock() default ItemBlock.class;
+
+	@Nonnull
+	EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
+
 }
