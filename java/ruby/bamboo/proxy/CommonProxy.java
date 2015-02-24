@@ -5,24 +5,26 @@ import ruby.bamboo.core.DataLoader;
 
 /**
  * サーバープロクシ
+ * 
  * @author Ruby
- *
+ * 
  */
 public class CommonProxy {
-	public void preInit(){
+	public void preInit() {
 		try {
-			DataLoader.instance.init(Constants.BLOCK_PACKAGE);
-			DataLoader.instance.init(Constants.ITEM_PACKAGE);
+			DataLoader loader = new DataLoader();
+			loader.init(Constants.BLOCK_PACKAGE);
+			loader.init(Constants.ITEM_PACKAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void init() {
-		
+
 	}
-	
-	private void searchBlock(){
-		
+
+	private void searchBlock() {
+
 	}
 }

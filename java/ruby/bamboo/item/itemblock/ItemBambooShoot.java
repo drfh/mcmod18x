@@ -1,4 +1,4 @@
-package ruby.bamboo.item;
+package ruby.bamboo.item.itemblock;
 
 import ruby.bamboo.core.BambooData;
 import ruby.bamboo.core.BambooData;

@@ -12,23 +12,43 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
 public @interface BambooData {
-	/**
-	 * 空白は自動的にクラス名を小文字化したものになる
-	 * @return
-	 */
-	@Nonnull
-	String name() default Constants.STR_EMPTY;
 
-	@Nonnull
-	EnumMaterial material() default EnumMaterial.GROUND;
-	
-	@Nonnull
-	Class<? extends ItemBlock> itemBlock() default ItemBlock.class;
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface BambooBlock {
+		/**
+		 * 空白は自動的にクラス名を小文字化したものになる
+		 * 
+		 * @return
+		 */
+		@Nonnull
+		String name() default Constants.STR_EMPTY;
 
-	@Nonnull
-	EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
+		@Nonnull
+		EnumMaterial material() default EnumMaterial.GROUND;
 
+		@Nonnull
+		Class<? extends ItemBlock> itemBlock() default ItemBlock.class;
+
+		@Nonnull
+		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface BambooItem {
+		/**
+		 * 空白は自動的にクラス名を小文字化したものになる
+		 * 
+		 * @return
+		 */
+		@Nonnull
+		String name() default Constants.STR_EMPTY;
+
+		@Nonnull
+		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
+
+		boolean blockOverride() default false;
+	}
 }

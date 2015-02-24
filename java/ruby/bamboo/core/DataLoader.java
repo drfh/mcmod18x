@@ -7,7 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import ruby.bamboo.core.BambooData;
+import ruby.bamboo.core.BambooData.BambooBlock;
+import ruby.bamboo.core.BambooData.BambooItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,12 +26,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class DataLoader extends ClassFinder {
 
-	private static final HashMap<Class<? extends Block>, String> classToNameMap = new HashMap<Class<? extends Block>, String>();
-	public static final DataLoader instance = new DataLoader();
-
-	private DataLoader() {
-	};
-
 	/**
 	 * 初期化処理
 	 */
@@ -38,146 +33,75 @@ public class DataLoader extends ClassFinder {
 		List<IData> rsltList = new ArrayList<IData>();
 		try {
 			for (Class entry : search(packagePath)) {
-				if (entry.isAnnotationPresent(BambooData.class)) {
-					IData data = this.createData(entry);
-					rsltList.add(data);
-					classToNameMap.put(entry, data.getName());
+				if (entry.isAnnotationPresent(BambooBlock.class)) {
+					registBlock(entry);
+				} else if (entry.isAnnotationPresent(BambooItem.class)) {
+					registItem(entry);
 				}
 			}
 		} catch (Exception e) {
 			FMLLog.warning("ブロック初期化例外");
 			e.printStackTrace();
 		}
-		for (IData data : rsltList) {
+	}
+
+	/**
+	 * ブロック側アノテーション処理
+	 * 
+	 * @param cls
+	 */
+	private void registBlock(Class<? extends Block> cls) {
+		try {
+			// マテリアルを持つコンストラクタはアノテーションでしたマテリアルで初期化する(継承対策)
+			Class c = Class.forName(cls.getName());
+			Block instance = null;
 			try {
-				// マテリアルを持つコンストラクタはアノテーションでしたマテリアルで初期化する(継承対策)
-				Class c = Class.forName(data.getClazz().getName());
 				Constructor cnst = c.getConstructor(Material.class);
-				Object instance = null;
-				if (cnst != null) {
-					instance = cnst.newInstance(((BambooData) c.getAnnotation(BambooData.class)).material().MATERIAL);
-				} else {
-					instance = c.newInstance();
-				}
-				if (instance instanceof Block) {
-					registInstance((Block) instance, data.getName(), data.getItemBlock(), data.getCreativeTab());
-				} else if (instance instanceof Item) {
-					registInstance((Item) instance, data.getName(), data.getCreativeTab());
-				}
-			} catch (Exception e) {
-				FMLLog.warning("インスタンス登録例外");
-				e.printStackTrace();
+				instance = (Block) cnst.newInstance(((BambooBlock) c.getAnnotation(BambooBlock.class)).material().MATERIAL);
+			} catch (NoSuchMethodException e) {
+				instance = (Block) c.newInstance();
 			}
+
+			BambooBlock anoData = (BambooBlock) cls.getAnnotation(BambooBlock.class);
+			String name = anoData.name().isEmpty() ? cls.getSimpleName().toLowerCase() : anoData.name().toLowerCase();
+			if (anoData.createiveTabs() != EnumCreateTab.NONE) {
+				instance.setCreativeTab(anoData.createiveTabs().getTabInstance());
+			}
+			instance.setUnlocalizedName(name);
+			GameRegistry.registerBlock(instance, anoData.itemBlock(), name);
+			DataManager.addClassToNameMap(cls, name);
+		} catch (Exception e) {
+			FMLLog.warning("ブロックインスタンス登録例外");
+			e.printStackTrace();
 		}
-	}
-
-	public static String getName(Class clazz) {
-		return classToNameMap.get(clazz);
-	}
-
-	public static String getModdedName(Class clazz) {
-		return BambooCore.MODID + Constants.DMAIN_SEPARATE + getName(clazz);
-	}
-
-	public static Collection<String> getRegstedNameList() {
-		return classToNameMap.values();
 	}
 
 	/**
-	 * 登録用データを生成して戻す。
+	 * アイテム側アノテーション処理
 	 * 
-	 * @param clazz
-	 * @return
+	 * @param cls
 	 */
-	private IData createData(Class clazz) {
-		IData data = new Data();
-		data.setClazz(clazz);
-		BambooData anoData = (BambooData) clazz.getAnnotation(BambooData.class);
-		String name = anoData.name();
-		data.setName(name.isEmpty() ? clazz.getSimpleName().toLowerCase() : name.toLowerCase());
-		data.setItemBlock(anoData.itemBlock());
-		data.setCreativeTab(anoData.createiveTabs().getTabInstance());
-		return data;
-	}
+	private void registItem(Class<? extends Item> cls) {
+		try {
+			Class c = Class.forName(cls.getName());
+			Item instance = (Item) c.newInstance();
 
-	/**
-	 * GameRegistoryに登録する(Block)
-	 * 
-	 * @param block
-	 * @param name
-	 * @param itemBlock
-	 * @param creativeTabs
-	 */
-	private void registInstance(Block block, String name, Class itemBlock, CreativeTabs creativeTabs) {
-		if (creativeTabs != null) {
-			block.setCreativeTab(creativeTabs);
+			BambooItem anoData = (BambooItem) cls.getAnnotation(BambooItem.class);
+			String name = anoData.name().isEmpty() ? cls.getSimpleName().toLowerCase() : anoData.name().toLowerCase();
+			if (anoData.createiveTabs() != EnumCreateTab.NONE) {
+				instance.setCreativeTab(anoData.createiveTabs().getTabInstance());
+			}
+			instance.setUnlocalizedName(name);
+			if (anoData.blockOverride()) {
+				GameRegistry.registerItem(instance, null, BambooCore.MODID);
+			} else {
+				GameRegistry.registerItem(instance, name);
+			}
+			DataManager.addClassToNameMap(cls, name);
+		} catch (Exception e) {
+			FMLLog.warning("アイテムインスタンス登録例外");
+			e.printStackTrace();
 		}
-		block.setUnlocalizedName(name);
-		GameRegistry.registerBlock(block, itemBlock, name);
-	}
-
-	/**
-	 * GameRegistoryに登録する(Item)
-	 * 
-	 * @param item
-	 * @param name
-	 * @param creativeTabs
-	 */
-	private void registInstance(Item item, String name, CreativeTabs creativeTabs) {
-		if (creativeTabs != null) {
-			item.setCreativeTab(creativeTabs);
-		}
-		item.setUnlocalizedName(name);
-		GameRegistry.registerItem(item, name);
-	}
-
-	public class Data implements IData {
-
-		private String name;
-		private CreativeTabs creativetab;
-		private Class<? extends ItemBlock> itemBlock;
-		private Class clazz;
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public CreativeTabs getCreativeTab() {
-			return creativetab;
-		}
-
-		@Override
-		public void setCreativeTab(CreativeTabs creativetab) {
-			this.creativetab = creativetab;
-		}
-
-		@Override
-		public Class<? extends ItemBlock> getItemBlock() {
-			return itemBlock;
-		}
-
-		@Override
-		public void setItemBlock(Class<? extends ItemBlock> itemBlock) {
-			this.itemBlock = itemBlock;
-		}
-
-		@Override
-		public Class getClazz() {
-			return clazz;
-		}
-
-		@Override
-		public void setClazz(Class clazz) {
-			this.clazz = clazz;
-		}
-
 	}
 
 }

@@ -7,7 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.StatCollector;
-import ruby.bamboo.item.ItemBambooShoot;
+import ruby.bamboo.item.itemblock.ItemBambooShoot;
 
 public enum EnumCreateTab {
 	NONE, TAB_BAMBOO;

@@ -18,11 +18,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ruby.bamboo.core.BambooData;
+import ruby.bamboo.core.BambooData.BambooBlock;
 import ruby.bamboo.core.Constants;
+import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.EnumCreateTab;
 import ruby.bamboo.core.EnumMaterial;
-import ruby.bamboo.item.ItemBambooShoot;
+import ruby.bamboo.item.itemblock.ItemBambooShoot;
 
 /**
  * たけのこ
@@ -30,7 +31,7 @@ import ruby.bamboo.item.ItemBambooShoot;
  * @author Ruby
  * 
  */
-@BambooData(itemBlock = ItemBambooShoot.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
+@BambooBlock(itemBlock = ItemBambooShoot.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
 public class BambooShoot extends BlockBush implements IGrowable {
 
 	public static final PropertyInteger METADATA = PropertyInteger.create(Constants.META, 0, 1);
@@ -67,6 +68,7 @@ public class BambooShoot extends BlockBush implements IGrowable {
 	public void tryBambooGrowth(World world, Random rand, BlockPos pos, IBlockState state, float prob) {
 		if (!world.isRemote) {
 			if (rand.nextFloat() < prob && canChildGrow(world, pos, state)) {
+				world.setBlockState(pos, DataManager.getState(Bamboo.class));
 				// world.setBlockState(pos,
 				// bambooList.get(world.rand.nextInt(bambooList.size())), 0, 3);
 			}
@@ -83,21 +85,6 @@ public class BambooShoot extends BlockBush implements IGrowable {
 			flg = chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 7;
 		}
 		return flg;
-	}
-
-	@Override
-	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
-		return true;
-	}
-
-	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		return true;
-	}
-
-	@Override
-	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-		this.tryBambooGrowth(world, rand, pos, state, 0.75F);
 	}
 
 	@Override
@@ -129,9 +116,19 @@ public class BambooShoot extends BlockBush implements IGrowable {
 		}
 	}
 
-	// @Override
-	// public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
-	// list.add(new ItemStack(itemIn, 1, 1));
-	// }
+	@Override
+	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+		return true;
+	}
+
+	@Override
+	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+		this.tryBambooGrowth(world, rand, pos, state, 0.75F);
+	}
 
 }

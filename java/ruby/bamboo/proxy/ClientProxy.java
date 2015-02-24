@@ -6,6 +6,7 @@ import java.util.List;
 import ruby.bamboo.core.BambooCore;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataLoader;
+import ruby.bamboo.core.DataManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -39,7 +40,7 @@ public class ClientProxy extends CommonProxy {
 	private void registJson() {
 		List<ItemStack> isList = new ArrayList<ItemStack>();
 		List<String> tmpNameList = new ArrayList<String>();
-		for (String name : DataLoader.getRegstedNameList()) {
+		for (String name : DataManager.getRegstedNameList()) {
 			String moddedName = BambooCore.MODID + Constants.DMAIN_SEPARATE + name;
 			Item item = Item.getByNameOrId(moddedName);
 			isList.clear();
