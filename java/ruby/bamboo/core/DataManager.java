@@ -3,6 +3,7 @@ package ruby.bamboo.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -50,16 +51,12 @@ public class DataManager {
 	}
 
 	/**
-	 * パフォーマンス悪いけども、そんなに呼び出す機会は初期化程度
+	 * コピー配列投げ、パフォーマンス若干わるし
 	 * 
 	 * @return
 	 */
-	public static List<String> getRegstedNameList() {
-		List<String> rslt = new ArrayList<String>();
-		for (Class key : classToNameMap.keySet()) {
-			rslt.add(getDefaultName(key));
-		}
-		return rslt;
+	public static String[] getRegstedNameArray() {
+		return classToNameMap.values().toArray(new String[0]);
 	}
 
 	/**

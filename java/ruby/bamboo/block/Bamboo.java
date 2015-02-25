@@ -16,7 +16,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ruby.bamboo.core.BambooData.BambooBlock;
 import ruby.bamboo.core.Constants;
+import ruby.bamboo.core.EnumCreateTab;
 import ruby.bamboo.core.EnumMaterial;
+import ruby.bamboo.item.itemblock.ItemBamboo;
 
 /**
  * ばんぼー
@@ -24,30 +26,31 @@ import ruby.bamboo.core.EnumMaterial;
  * @author Ruby
  * 
  */
-@BambooBlock(material = EnumMaterial.PLANTS)
+@BambooBlock(itemBlock = ItemBamboo.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
 public class Bamboo extends BlockBush implements IGrowable {
 
-	public static final PropertyInteger METADATA = PropertyInteger.create(Constants.META, 0, 10);
-	public static final PropertyInteger TYPEDATA = PropertyInteger.create(Constants.TYPE, 0, 3);
+	public static final PropertyInteger AGE = PropertyInteger.create(Constants.AGE, 0, 10);
+	public static final PropertyInteger META = PropertyInteger.create(Constants.META, 0, 10);
+	public static final PropertyInteger TYPE = PropertyInteger.create(Constants.TYPE, 0, 3);
 
 	public Bamboo(Material material) {
 		super(material);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(METADATA, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0).withProperty(META,0).withProperty(TYPE,0));
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(METADATA, meta);
+		return this.getDefaultState().withProperty(AGE, meta);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return (Integer) state.getValue(METADATA);
+		return (Integer) state.getValue(AGE);
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, METADATA);
+		return new BlockState(this, AGE);
 	}
 
 	/**
@@ -57,6 +60,10 @@ public class Bamboo extends BlockBush implements IGrowable {
 	@SideOnly(Side.CLIENT)
 	public Block.EnumOffsetType getOffsetType() {
 		return Block.EnumOffsetType.XYZ;
+	}
+
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		
 	}
 
 	@Override
@@ -71,6 +78,7 @@ public class Bamboo extends BlockBush implements IGrowable {
 
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+
 		// this.tryBambooGrowth(world, rand, pos, state, 0.75F);
 	}
 

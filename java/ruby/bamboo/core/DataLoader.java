@@ -92,11 +92,9 @@ public class DataLoader extends ClassFinder {
 				instance.setCreativeTab(anoData.createiveTabs().getTabInstance());
 			}
 			instance.setUnlocalizedName(name);
-			if (anoData.blockOverride()) {
-				GameRegistry.registerItem(instance, null, BambooCore.MODID);
-			} else {
-				GameRegistry.registerItem(instance, name);
-			}
+
+			GameRegistry.registerItem(instance, name);
+
 			DataManager.addClassToNameMap(cls, name);
 		} catch (Exception e) {
 			FMLLog.warning("アイテムインスタンス登録例外");
