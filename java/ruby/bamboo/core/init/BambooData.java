@@ -1,10 +1,11 @@
-package ruby.bamboo.core;
+package ruby.bamboo.core.init;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ruby.bamboo.core.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 
@@ -15,8 +16,6 @@ public @interface BambooData {
 	public @interface BambooBlock {
 		/**
 		 * 空白は自動的にクラス名を小文字化したものになる
-		 * 
-		 * @return
 		 */
 
 		String name() default Constants.STR_EMPTY;
@@ -28,6 +27,11 @@ public @interface BambooData {
 		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
 
 		boolean disableItem() default false;
+
+		// stateを無視する用
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		public @interface StateIgnore{};
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
@@ -35,14 +39,10 @@ public @interface BambooData {
 	public @interface BambooItem {
 		/**
 		 * 空白は自動的にクラス名を小文字化したものになる
-		 * 
-		 * @return
 		 */
 
 		String name() default Constants.STR_EMPTY;
 
 		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
-
-		Class<? extends Block> overrideModel();
 	}
 }

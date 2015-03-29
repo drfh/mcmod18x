@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -18,11 +19,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ruby.bamboo.core.BambooData.BambooBlock;
+import ruby.bamboo.core.init.EnumCreateTab;
+import ruby.bamboo.core.init.EnumMaterial;
+import ruby.bamboo.core.init.BambooData.BambooBlock;
+import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataManager;
-import ruby.bamboo.core.EnumCreateTab;
-import ruby.bamboo.core.EnumMaterial;
 import ruby.bamboo.item.itemblock.ItemBambooShoot;
 
 /**
@@ -34,11 +36,11 @@ import ruby.bamboo.item.itemblock.ItemBambooShoot;
 @BambooBlock(itemBlock = ItemBambooShoot.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
 public class BambooShoot extends BlockBush implements IGrowable {
 
-	public static final PropertyInteger METADATA = PropertyInteger.create(Constants.META, 0, 1);
+	public static final PropertyInteger META = PropertyInteger.create(Constants.META, 0, 1);
 
 	public BambooShoot(Material material) {
 		super(material);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(METADATA, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
 	}
 
 	/**
@@ -52,17 +54,17 @@ public class BambooShoot extends BlockBush implements IGrowable {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(METADATA, meta);
+		return this.getDefaultState().withProperty(META, meta);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return (Integer) state.getValue(METADATA);
+		return (Integer) state.getValue(META);
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, METADATA);
+		return new BlockState(this, META);
 	}
 
 	public void tryBambooGrowth(World world, Random rand, BlockPos pos, IBlockState state, float prob) {
@@ -131,4 +133,8 @@ public class BambooShoot extends BlockBush implements IGrowable {
 		this.tryBambooGrowth(world, rand, pos, state, 0.75F);
 	}
 
+	@StateIgnore
+	public IProperty[] getIgnoreState() {
+		return new IProperty[] { META };
+	}
 }

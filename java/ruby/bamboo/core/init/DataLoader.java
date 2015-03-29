@@ -1,22 +1,15 @@
-package ruby.bamboo.core;
+package ruby.bamboo.core.init;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
-import ruby.bamboo.core.BambooData.BambooBlock;
-import ruby.bamboo.core.BambooData.BambooItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.MinecraftError;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import ruby.bamboo.core.DataManager;
+import ruby.bamboo.core.init.BambooData.BambooBlock;
+import ruby.bamboo.core.init.BambooData.BambooItem;
 
 /**
  * ブロック自動登録
@@ -30,7 +23,6 @@ public class DataLoader extends ClassFinder {
 	 * 初期化処理
 	 */
 	public void init(String packagePath) {
-		List<IData> rsltList = new ArrayList<IData>();
 		try {
 			for (Class entry : search(packagePath)) {
 				if (entry.isAnnotationPresent(BambooBlock.class)) {
@@ -40,7 +32,7 @@ public class DataLoader extends ClassFinder {
 				}
 			}
 		} catch (Exception e) {
-			FMLLog.warning("ブロック初期化例外");
+			FMLLog.bigWarning("ブロック初期化例外");
 			e.printStackTrace();
 		}
 	}
@@ -63,13 +55,15 @@ public class DataLoader extends ClassFinder {
 			}
 
 			BambooBlock anoData = (BambooBlock) cls.getAnnotation(BambooBlock.class);
+			// 名前の指定がないときはクラス名小文字
 			String name = anoData.name().isEmpty() ? cls.getSimpleName().toLowerCase() : anoData.name().toLowerCase();
 			if (anoData.createiveTabs() != EnumCreateTab.NONE) {
 				instance.setCreativeTab(anoData.createiveTabs().getTabInstance());
 			}
 			instance.setUnlocalizedName(name);
 			GameRegistry.registerBlock(instance, anoData.itemBlock(), name);
-			DataManager.addClassToNameMap(cls, name);
+			FMLLog.info("BLOCK: %s to Registed",name);
+			DataManager.addMap(cls, name);
 		} catch (Exception e) {
 			FMLLog.warning("ブロックインスタンス登録例外");
 			e.printStackTrace();
@@ -87,6 +81,7 @@ public class DataLoader extends ClassFinder {
 			Item instance = (Item) c.newInstance();
 
 			BambooItem anoData = (BambooItem) cls.getAnnotation(BambooItem.class);
+			// 名前の指定がないときはクラス名小文字
 			String name = anoData.name().isEmpty() ? cls.getSimpleName().toLowerCase() : anoData.name().toLowerCase();
 			if (anoData.createiveTabs() != EnumCreateTab.NONE) {
 				instance.setCreativeTab(anoData.createiveTabs().getTabInstance());
@@ -94,8 +89,9 @@ public class DataLoader extends ClassFinder {
 			instance.setUnlocalizedName(name);
 
 			GameRegistry.registerItem(instance, name);
+			FMLLog.info("ITEM: %s to Registed",name);
 
-			DataManager.addClassToNameMap(cls, name);
+			DataManager.addMap(cls, name);
 		} catch (Exception e) {
 			FMLLog.warning("アイテムインスタンス登録例外");
 			e.printStackTrace();

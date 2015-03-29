@@ -1,4 +1,4 @@
-package ruby.bamboo.core;
+package ruby.bamboo.core.init;
 
 import java.io.File;
 import java.net.JarURLConnection;

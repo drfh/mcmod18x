@@ -1,4 +1,4 @@
-package ruby.bamboo.core;
+package ruby.bamboo.core.init;
 
 import java.util.HashMap;
 
@@ -7,6 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.StatCollector;
+import ruby.bamboo.core.Constants;
 import ruby.bamboo.item.itemblock.ItemBambooShoot;
 
 public enum EnumCreateTab {
@@ -16,7 +17,7 @@ public enum EnumCreateTab {
 	static {
 		map = new HashMap<EnumCreateTab, CreativeTabs>();
 		map.put(NONE, null);
-		map.put(TAB_BAMBOO, new CreativeTabs(BambooCore.MODID) {
+		map.put(TAB_BAMBOO, new CreativeTabs(Constants.MODID) {
 			@Override
 			public String getTranslatedTabLabel() {
 				return StatCollector.translateToLocal(this.getTabLabel());

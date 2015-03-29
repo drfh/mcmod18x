@@ -1,4 +1,4 @@
-package ruby.bamboo.core;
+package ruby.bamboo.core.init;
 
 import net.minecraft.block.material.Material;
 

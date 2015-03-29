@@ -1,15 +1,15 @@
 package ruby.bamboo.core;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  * ばんぶーの適当な管理
@@ -19,15 +19,16 @@ import net.minecraft.item.Item;
  */
 public class DataManager {
 
-	private static final HashMap<Class, String> classToNameMap = new HashMap<Class, String>();
-	
+	private static final BiMap<Class, String> map = HashBiMap.create();
+
 	/**
 	 * 使用頻度が高いであろう"MODID" + ":" + "NAME" 形式で保持する
+	 * 
 	 * @param cls
 	 * @param str
 	 */
-	protected static void addClassToNameMap(Class cls, String str) {
-		classToNameMap.put(cls, BambooCore.MODID + Constants.DMAIN_SEPARATE + str);
+	public static void addMap(Class cls, String str) {
+		map.put(cls, Constants.MODID + Constants.DMAIN_SEPARATE + str);
 	}
 
 	/**
@@ -47,16 +48,26 @@ public class DataManager {
 	 * @return
 	 */
 	public static String getName(Class clazz) {
-		return classToNameMap.get(clazz);
+		return map.get(clazz);
 	}
 
 	/**
-	 * コピー配列投げ、パフォーマンス若干わるし
+	 * 名前一覧取得
 	 * 
 	 * @return
 	 */
-	public static String[] getRegstedNameArray() {
-		return classToNameMap.values().toArray(new String[0]);
+	public static Collection<String> getRegstedNameArray() {
+		return map.values();
+	}
+
+	/**
+	 * クラス一覧投げ
+	 * 
+	 * @return
+	 */
+	public static Set<Class> getRegstedClassArray() {
+
+		return map.keySet();
 	}
 
 	/**
@@ -65,10 +76,10 @@ public class DataManager {
 	 * @param
 	 * @return
 	 */
-	public static Item getItem(Class cls) {
+	public static <T extends Item> T getItem(Class<T> cls) {
 		String name = getName(cls);
 		if (name != null) {
-			return Item.getByNameOrId(name);
+			return (T) Item.getByNameOrId(name);
 		}
 		return null;
 	}
@@ -79,16 +90,16 @@ public class DataManager {
 	 * @param
 	 * @return
 	 */
-	public static Block getBlock(Class cls) {
+	public static <T extends Block> T getBlock(Class<T> cls) {
 		String name = getName(cls);
 		if (name != null) {
-			return Block.getBlockFromName(name);
+			return (T) Block.getBlockFromName(name);
 		}
 		return null;
 	}
 
 	/**
-	 * ばんぶー専用
+	 * ばんぶー専用(getDefaultState())
 	 * 
 	 * @param
 	 * @return
@@ -96,4 +107,15 @@ public class DataManager {
 	public static IBlockState getState(Class cls) {
 		return getBlock(cls).getDefaultState();
 	}
+
+	/**
+	 * 名前からクラス
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static Class getClass(String name) {
+		return map.inverse().get(name);
+	}
+
 }

@@ -1,5 +1,7 @@
 package ruby.bamboo.item.itemblock;
 
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -9,15 +11,17 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import ruby.bamboo.block.Bamboo;
-import ruby.bamboo.core.BambooData;
-import ruby.bamboo.core.BambooData.BambooItem;
-import ruby.bamboo.core.EnumCreateTab;
+import ruby.bamboo.core.Constants;
+import ruby.bamboo.core.init.BambooData;
+import ruby.bamboo.core.init.EnumCreateTab;
+import ruby.bamboo.core.init.BambooData.BambooItem;
+import ruby.bamboo.core.init.IOreNameable;
 /**
  * いつか殺す
  * @author Ruby
  *
  */
-public class ItemBamboo extends ItemBlock {
+public class ItemBamboo extends ItemBlock implements IOreNameable{
 
 	public ItemBamboo(Block block) {
 		super(block);
@@ -28,5 +32,11 @@ public class ItemBamboo extends ItemBlock {
     {
     	return false;
     }
+
+	@Override
+	public Map<String,ItemStack> getOreName(Map<String, ItemStack> map) {
+		map.put(Constants.ORE_BAMBOO, new ItemStack(this));
+		return map;
+	}
 
 }

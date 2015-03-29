@@ -20,20 +20,17 @@ import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper.UnableToAccessFieldException;
 
-@Mod(modid = BambooCore.MODID, name = BambooCore.MODID, version = "Minecraft"
-		+ BambooCore.MC_VER + " var" + BambooCore.BAMBOO_VER, useMetadata = true)
+@Mod(modid = Constants.MODID, name = Constants.MODID, version = "Minecraft"
+		+ Constants.MC_VER + " var" + Constants.BAMBOO_VER, useMetadata = true)
 // フォージバージョン制限、必要になれば。 dependencies = "required-after:Forge@[10.13.2.1230,)")
 public class BambooCore {
-	public static final String MODID = "BambooMod";
-	public static final String MC_VER = "@MC_VERSION@";
-	public static final String BAMBOO_VER = "@VERSION@";
-	public static final String resourceDomain = "bamboomod";
+
 	public static final boolean DEBUGMODE = isDevelopment();
 
 	@SidedProxy(serverSide = "ruby.bamboo.proxy.CommonProxy", clientSide = "ruby.bamboo.proxy.ClientProxy")
 	public static CommonProxy proxy;
 
-	@Instance(MODID)
+	@Instance(Constants.MODID)
 	public static BambooCore instance;
 
 	@Mod.EventHandler
