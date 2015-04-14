@@ -16,6 +16,7 @@ import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.DataLoader;
 import ruby.bamboo.core.init.IOreNameable;
 import ruby.bamboo.core.init.IRecipeable;
+import ruby.bamboo.generate.GenerateHandler;
 
 /**
  * サーバープロクシ
@@ -25,6 +26,7 @@ import ruby.bamboo.core.init.IRecipeable;
  */
 public class CommonProxy {
 	public void preInit() {
+		// ブロックアイテム初期化
 		try {
 			FMLLog.info("********** BambooMod Data Init Start **********");
 			DataLoader loader = new DataLoader();
@@ -34,6 +36,9 @@ public class CommonProxy {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// じぇねれーた
+		GenerateHandler gen=new GenerateHandler();
+		GameRegistry.registerWorldGenerator(gen, 1);
 	}
 
 	public void init() {

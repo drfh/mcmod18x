@@ -32,7 +32,7 @@ import ruby.bamboo.item.itemblock.ItemBamboo;
  */
 @BambooBlock(itemBlock = ItemBamboo.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
 public class Bamboo extends BlockBush implements IGrowable {
-	// 現在の長さ 
+	// 現在の長さ
 	public static final PropertyInteger AGE = PropertyInteger.create(Constants.AGE, 0, 15);
 	// 最大の長さ
 	public static final PropertyInteger MAX_LENGTH = PropertyInteger.create(Constants.META, 7, 15);
@@ -43,6 +43,10 @@ public class Bamboo extends BlockBush implements IGrowable {
 		this.setTickRandomly(true);
 		this.setHardness(1.0F);
 		this.setResistance(1F);
+		this.setHardness(0.75F);
+		this.setResistance(1F);
+		this.setBlockBounds(0.125F, 0.0F, 0.125F, 0.875F, 1.0F, 0.875F);
+		this.setHarvestLevel("axe", 0);
 	}
 
 	@Override
@@ -89,8 +93,13 @@ public class Bamboo extends BlockBush implements IGrowable {
 		}
 	}
 
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		tryBambooGrowth(world, pos, state, world.isRaining() ? 0.25F : 0.125F);
+	}
+
 	private void growBamboo(World world, BlockPos pos, int meta) {
-		world.setBlockState(pos.up(), this.getStateFromMeta(meta++));
+		world.setBlockState(pos.up(), this.getStateFromMeta(++meta));
 	}
 
 	private void tryChildSpawn(World world, IBlockState state, BlockPos pos) {
