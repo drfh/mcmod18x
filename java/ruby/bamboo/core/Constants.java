@@ -16,7 +16,7 @@ public class Constants {
 	public static final String MODID = "BambooMod";
 	public static final String MC_VER = "@MC_VERSION@";
 	public static final String BAMBOO_VER = "@VERSION@";
-	public static final String RESOURCED_DOMAIN = "bamboomod";
+	public static final String RESOURCED_DOMAIN = "bamboomod:";
 	public static final String STR_EMPTY = "";
 	
 	//すてーとたいぷ(良くわかってない)
@@ -26,7 +26,7 @@ public class Constants {
 	
 	//せぱれー
 	/**
-	 * ドメイン用
+	 * ドメイン変わることもある？
 	 */
 	public static final String DMAIN_SEPARATE = ":";
 	/**

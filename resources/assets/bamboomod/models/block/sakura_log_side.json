@@ -1,0 +1,7 @@
+{
+    "parent": "block/column_side",
+    "textures": {
+        "end": "bamboomod:blocks/sakuralog_t",
+        "side": "bamboomod:blocks/sakuralog_s"
+    }
+}

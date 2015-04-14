@@ -1,12 +1,13 @@
 package ruby.bamboo.proxy;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
 import ruby.bamboo.core.DataManager;
+import ruby.bamboo.core.init.BambooData.BambooBlock.StateCustom;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 
 /**
@@ -47,7 +49,7 @@ public class ClientProxy extends CommonProxy {
 			isList.clear();
 			item.getSubItems(item, item.getCreativeTab(), isList);
 			this.setIgnoreState(DataManager.getBlock(DataManager.getClass(name)));
-
+			this.setCustomState(DataManager.getBlock(DataManager.getClass(name)));
 			if (isList.size() == 1) {
 				ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(name, "inventory"));
 			} else {
@@ -61,21 +63,32 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	/**
+	 * カスタムstate設定
+	 * 
+	 * @param block
+	 */
+	private <T> void setCustomState(T obj) {
+		Method method = this.getMethod(obj, StateCustom.class);
+		if (method != null) {
+			try {
+				IStateMapper state = (IStateMapper) method.invoke(obj);
+				if (state != null) {
+					ModelLoader.setCustomStateMapper((Block) obj, state);
+				}
+			} catch (Exception e) {
+				FMLLog.warning(obj.getClass().getName() + "Custom State Error");
+			}
+		}
+	}
+
+	/**
 	 * stateをmodel参照時無視する
 	 * 
 	 * @param <T>
 	 */
 	private <T> void setIgnoreState(T obj) {
-		if (obj == null) {
-			return;
-		}
-		Method method = null;
-		for (Method e : obj.getClass().getDeclaredMethods()) {
-			if (e.getAnnotation(StateIgnore.class) != null) {
-				method = e;
-				break;
-			}
-		}
+		Method method = this.getMethod(obj, StateIgnore.class);
+
 		if (method != null) {
 			try {
 				IProperty[] prop = (IProperty[]) method.invoke(obj);
@@ -86,5 +99,26 @@ public class ClientProxy extends CommonProxy {
 				FMLLog.warning(obj.getClass().getName() + "Ignore State Error");
 			}
 		}
+	}
+
+	/**
+	 * アノテーション付きメソッド探索
+	 * 
+	 * @param obj
+	 * @param ano
+	 * @return
+	 */
+	private <T> Method getMethod(T obj, Class<? extends Annotation> ano) {
+		if (obj == null) {
+			return null;
+		}
+		Method method = null;
+		for (Method e : obj.getClass().getDeclaredMethods()) {
+			if (e.getAnnotation(ano) != null) {
+				method = e;
+				break;
+			}
+		}
+		return method;
 	}
 }

@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "axis=y":  { "model": "bamboomod:sakura_log" },
+        "axis=z":   { "model": "bamboomod:sakura_log_side" },
+        "axis=x":   { "model": "bamboomod:sakura_log_side", "y": 90 },
+        "axis=none": { "model": "bamboomod:sakura_bark" }
+    }
+}

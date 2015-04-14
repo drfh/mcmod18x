@@ -32,6 +32,11 @@ public @interface BambooData {
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		public @interface StateIgnore{};
+		
+		// 特殊state用
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		public @interface StateCustom{};
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
