@@ -1,0 +1,7 @@
+{
+    "parent": "block/column_side",
+    "textures": {
+        "end": "bamboomod:blocks/sakuraplank_x",
+        "side": "bamboomod:blocks/sakuraplank_y"
+    }
+}
