@@ -26,7 +26,7 @@ public @interface BambooData {
 
 		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
 
-		boolean disableItem() default false;
+//		boolean disableItem() default false;
 
 		// stateを無視する用
 		@Retention(RetentionPolicy.RUNTIME)

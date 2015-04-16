@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
@@ -53,10 +54,10 @@ public class ClientProxy extends CommonProxy {
 			if (isList.size() == 1) {
 				ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(name, "inventory"));
 			} else {
-				// TODO:複数IDパターン要チェック
 				for (int i = 0; i < isList.size(); i++) {
-					ModelBakery.addVariantName(item, name + i);
-					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(name + i, "inventory"));
+					//jsonファイルをmeta毎切り替えたい場合に追加を考える、ご飯系とか？
+					//ModelBakery.addVariantName(item, name + i);
+					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(name, "inventory"));
 				}
 			}
 		}
