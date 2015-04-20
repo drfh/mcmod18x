@@ -17,11 +17,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import ruby.bamboo.block.SakuraLeave.EnumLeave;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
@@ -30,16 +30,17 @@ import ruby.bamboo.item.itemblock.ItemSakuraLeave;
 
 import com.google.common.base.Predicate;
 
-@BambooBlock(name = "sakura_leave", itemBlock = ItemSakuraLeave.class, createiveTabs = EnumCreateTab.TAB_BAMBOO)
-public class SakuraLeave extends BlockLeaves implements ILeave {
+@BambooBlock(name = "broad_leave", itemBlock = ItemSakuraLeave.class, createiveTabs = EnumCreateTab.TAB_BAMBOO)
+public class BroadLeave extends BlockLeaves implements ILeave{
 
-	// クソゴミ仕様に合わせるのつらい
+	private static final int metaSlide=4;
+	// クソゴミ仕様に合わせるのつらい、なんで同じ処理2回も書かないといけないの？state回り設計した奴はマジで馬鹿なの？OleLeaveとNewLeave書いてる時に疑問持てよ無能
 	public final static PropertyEnum VARIANT = PropertyEnum.create("variant", EnumLeave.class, new Predicate()
 	{
 		public boolean apply(EnumLeave type)
 		{
 			;
-			return type.getMetadata() < 4;
+			return type.getMetadata() >= 4;
 		}
 
 		public boolean apply(Object p_apply_1_)
@@ -48,9 +49,9 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 		}
 	});;
 
-	public SakuraLeave() {
+	public BroadLeave() {
 		super();
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumLeave.WHITE).withProperty(CHECK_DECAY, Boolean.valueOf(true))
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumLeave.GREEN).withProperty(CHECK_DECAY, Boolean.valueOf(true))
 				.withProperty(DECAYABLE, Boolean.valueOf(true)));
 		this.fancyGraphics = true;
 		this.setLightLevel(0.75F);
@@ -60,7 +61,7 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	public int getMetaFromState(IBlockState state)
 	{
 		byte b0 = 0;
-		int i = b0 | ((EnumLeave) state.getValue(VARIANT)).getMetadata();
+		int i = b0 | ((EnumLeave) state.getValue(VARIANT)).getMetadata()-metaSlide;
 
 		if (!((Boolean) state.getValue(DECAYABLE)).booleanValue())
 		{
@@ -79,7 +80,7 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return this.getDefaultState().withProperty(VARIANT, EnumLeave.getLeave(meta & 3)).withProperty(DECAYABLE, (meta & 4) == 0)
+		return this.getDefaultState().withProperty(VARIANT, EnumLeave.getLeave((meta&3)+metaSlide)).withProperty(DECAYABLE, (meta & 4) == 0)
 				.withProperty(CHECK_DECAY, (meta & 8) > 0);
 	}
 
@@ -91,15 +92,15 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
-		for (EnumLeave leave : EnumLeave.SAKURA_LEAVES) {
-			list.add(new ItemStack(itemIn, 1, leave.getMetadata()));
+		for (EnumLeave leave : EnumLeave.BROAD_LEAVES) {
+			list.add(new ItemStack(itemIn, 1, leave.getMetadata()-metaSlide));
 		}
 	}
 
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		return new ArrayList(Arrays.asList(new ItemStack(this, 1, ((EnumLeave) state.getValue(VARIANT)).getMetadata())));
+		return new ArrayList(Arrays.asList(new ItemStack(this, 1, ((EnumLeave) state.getValue(VARIANT)).getMetadata()-metaSlide)));
 	}
 
 	// 拡張性0abstractクソゴミ仕様
@@ -109,7 +110,7 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	}
 
 	public String getLeaveName(int metadata) {
-		return EnumLeave.getLeave(metadata).getName();
+		return EnumLeave.getLeave(metadata+4).getName();
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	@Override
 	protected ItemStack createStackedBlock(IBlockState state)
 	{
-		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumLeave) state.getValue(VARIANT)).getMetadata());
+		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumLeave) state.getValue(VARIANT)).getMetadata()-metaSlide);
 	}
 
 	@Override
@@ -161,56 +162,12 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	{
 		return false;
 	}
-
+	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (placer != null) {
 			worldIn.setBlockState(pos, state.withProperty(DECAYABLE, false),4);
 		}
-	}
-
-	public enum EnumLeave implements IStringSerializable {
-		WHITE(0, 0xFFFFFF, 1, 15),
-		PURPLE(1, 0xFFC5FC, 1, 5),
-		MAGENTA(2, 0xF09090, 1, 13),
-		PINK(3, 0xFFC5CC, 1, 9),
-		GREEN(4, 0x3F9E55, 1, 2),
-		RED(5, 0xc80010, 2, 1),
-		YELLOW(6, 0xf5e600, 3, 11),
-		ORANGE(7, 0xFFC600, 3, 14), ;
-		EnumLeave(int meta, int color, int petal, int dyeCode) {
-			this.meta = (byte) meta;
-			this.color = color;
-			this.petal = (byte) petal;
-		}
-
-		public static final EnumLeave[] SAKURA_LEAVES = { WHITE, PURPLE, MAGENTA, PINK };
-		public static final EnumLeave[] BROAD_LEAVES = { GREEN, RED, YELLOW, ORANGE };
-		private byte meta;
-		private int color;
-		private byte petal;
-
-		public static EnumLeave getLeave(int meta) {
-			return meta < SAKURA_LEAVES.length ? SAKURA_LEAVES[meta] : BROAD_LEAVES[meta % 4];
-		}
-
-		public byte getMetadata() {
-			return this.meta;
-		}
-
-		public int getColor() {
-			return this.color;
-		}
-
-		public byte getPetal() {
-			return this.petal;
-		}
-
-		@Override
-		public String getName() {
-			return this.name().toLowerCase();
-		}
-
 	}
 
 }

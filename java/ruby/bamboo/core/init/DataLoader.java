@@ -65,7 +65,7 @@ public class DataLoader extends ClassFinder {
 			FMLLog.info("BLOCK: %s to Registed",name);
 			DataManager.addMap(cls, name);
 		} catch (Exception e) {
-			FMLLog.warning("ブロックインスタンス登録例外");
+			FMLLog.warning("ブロックインスタンス登録例外:"+cls.getName());
 			e.printStackTrace();
 		}
 	}
@@ -93,7 +93,7 @@ public class DataLoader extends ClassFinder {
 
 			DataManager.addMap(cls, name);
 		} catch (Exception e) {
-			FMLLog.warning("アイテムインスタンス登録例外");
+			FMLLog.warning("アイテムインスタンス登録例外:"+cls.getName());
 			e.printStackTrace();
 		}
 	}

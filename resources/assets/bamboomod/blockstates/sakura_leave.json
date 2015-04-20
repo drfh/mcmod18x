@@ -1,20 +1,8 @@
 {
     "variants": {
-        "variant=black":  { "model": "bamboomod:sakura_leave" },
-        "variant=red":  { "model": "bamboomod:sakura_leave" },
-        "variant=green":  { "model": "bamboomod:sakura_leave" },
-        "variant=cacao":  { "model": "bamboomod:sakura_leave" },
-        "variant=blue":  { "model": "bamboomod:sakura_leave" },
         "variant=purple":  { "model": "bamboomod:sakura_leave" },
-        "variant=cyan":  { "model": "bamboomod:sakura_leave" },
-        "variant=light_gray":  { "model": "bamboomod:sakura_leave" },
-        "variant=gray":  { "model": "bamboomod:sakura_leave" },
         "variant=pink":  { "model": "bamboomod:sakura_leave" },
-        "variant=lime":  { "model": "bamboomod:sakura_leave" },
-        "variant=yellow":  { "model": "bamboomod:sakura_leave" },
-        "variant=light_blue":  { "model": "bamboomod:sakura_leave" },
         "variant=magenta":  { "model": "bamboomod:sakura_leave" },
-        "variant=orange":  { "model": "bamboomod:sakura_leave" },
         "variant=white":  { "model": "bamboomod:sakura_leave" }
     }
 }
