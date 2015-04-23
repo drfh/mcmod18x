@@ -42,6 +42,7 @@ public class BambooShoot extends BlockBush implements IGrowable {
 		super(material);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0));
 		this.setTickRandomly(true);
+		this.setHardness(0.05F);
 		this.setBlockBounds(0.3F, 0.0F, 0.3F, 0.7F, 0.5F, 0.7F);
 	}
 

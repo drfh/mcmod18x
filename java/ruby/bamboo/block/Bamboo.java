@@ -41,8 +41,6 @@ public class Bamboo extends BlockBush implements IGrowable {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0).withProperty(MAX_LENGTH, 10));
 		this.setLightOpacity(0);
 		this.setTickRandomly(true);
-		this.setHardness(1.0F);
-		this.setResistance(1F);
 		this.setHardness(0.75F);
 		this.setResistance(1F);
 		this.setBlockBounds(0.125F, 0.0F, 0.125F, 0.875F, 1.0F, 0.875F);
@@ -161,6 +159,7 @@ public class Bamboo extends BlockBush implements IGrowable {
 		return ((Integer) state.getValue(MAX_LENGTH)).intValue();
 	}
 
+	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
 
 	}

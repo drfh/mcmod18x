@@ -12,6 +12,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import ruby.bamboo.block.BambooShoot;
+import ruby.bamboo.block.SakuraSapling;
 import ruby.bamboo.core.DataManager;
 
 public class GenerateHandler implements IWorldGenerator {
@@ -27,6 +28,9 @@ public class GenerateHandler implements IWorldGenerator {
 					switch (random.nextInt(4)) {
 					case 1:
 						this.generateBambooshoot(random, world, chunkX, chunkZ, 60);
+						break;
+					case 2:
+						this.generateSakura(random, world, chunkX, chunkZ, 90);
 						break;
 					}
 				}
@@ -55,6 +59,22 @@ public class GenerateHandler implements IWorldGenerator {
 				if (world.isAirBlock(pos)) {
 					if (block.getBlock() == Blocks.grass || block.getBlock() == Blocks.dirt) {
 						world.setBlockState(pos, DataManager.getState(BambooShoot.class));
+					}
+				}
+			}
+		}
+	}
+
+	private void generateSakura(Random random, World world, int chunkX, int chunkZ, int maxHeight) {
+		for (int l = random.nextInt(5); 0 < l; l--) {
+			BlockPos orign = new BlockPos(chunkX * 16 + random.nextInt(16), random.nextInt(maxHeight) + 60, chunkZ * 16 + random.nextInt(16));
+			for (int var6 = 0; var6 < 10; ++var6) {
+				BlockPos pos = orign.add(8 - random.nextInt(16), 4 - random.nextInt(8), 8 - random.nextInt(16));
+				IBlockState block = world.getBlockState(pos.down());
+				if (world.isAirBlock(pos)) {
+					if (block.getBlock() == Blocks.grass || block.getBlock() == Blocks.dirt) {
+						DataManager.getBlock(SakuraSapling.class).generateTree(world, pos, DataManager.getState(SakuraSapling.class), random);
+						return;
 					}
 				}
 			}

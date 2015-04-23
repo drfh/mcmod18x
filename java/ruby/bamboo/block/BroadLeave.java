@@ -55,6 +55,7 @@ public class BroadLeave extends BlockLeaves implements ILeave{
 				.withProperty(DECAYABLE, Boolean.valueOf(true)));
 		this.fancyGraphics = true;
 		this.setLightLevel(0.75F);
+		this.setHardness(0);
 	}
 
 	@Override

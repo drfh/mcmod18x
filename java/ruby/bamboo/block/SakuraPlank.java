@@ -33,6 +33,8 @@ public class SakuraPlank extends AxisBase {
 	public SakuraPlank(Material materialIn) {
 		super(materialIn);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, SakuraPlank.EnumType.SAKURA).withProperty(AXIS, EnumFacing.Axis.Y));
+		this.setHardness(0.2F);
+		this.setResistance(1F);
 	}
 
 	@StateCustom
