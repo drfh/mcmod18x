@@ -51,8 +51,8 @@ public class CommonProxy {
 	// 鉱石名登録
 	private void registRecipe() {
 		BambooRecipes recipeIns = new BambooRecipes();
-		recipeIns.craftingTableRecipes();
 		recipeIns.oreDicRegist();
+		recipeIns.craftingTableRecipes();
 		recipeIns.smeltingRecipes();
 		recipeIns.registFuel();
 	}

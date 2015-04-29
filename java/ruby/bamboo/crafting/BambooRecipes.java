@@ -1,19 +1,27 @@
 package ruby.bamboo.crafting;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import ruby.bamboo.block.Bamboo;
 import ruby.bamboo.block.SakuraLog;
 import ruby.bamboo.block.SakuraPlank;
 import ruby.bamboo.core.DataManager;
+import ruby.bamboo.item.FoldingFan;
 import ruby.bamboo.item.Sack;
+import ruby.bamboo.item.Tudura;
 
 public class BambooRecipes {
 	private int WILD = Short.MAX_VALUE;
+	private String bamboo = "bamboo";
+	private String tudura = "tudura";
 
 	/**
 	 * 鉱石辞書
@@ -21,14 +29,22 @@ public class BambooRecipes {
 	public void oreDicRegist() {
 		OreDictionary.registerOre("logWood", getIS(SakuraLog.class));
 		OreDictionary.registerOre("plankWood", getIS(SakuraPlank.class));
+		OreDictionary.registerOre(bamboo, getIS(Bamboo.class));
+		OreDictionary.registerOre(tudura, getIS(Tudura.class));
 	}
 
 	/**
 	 * クラフトテーブル
 	 */
 	public void craftingTableRecipes() {
+		// サクラ原木→木材
 		addShapelessRecipe(getIS(SakuraPlank.class, 4, 0), SakuraLog.class);
+		// 袋開放
 		addShapelessRecipe(getIS(Sack.class), getIS(Sack.class, 1, WILD));
+		// 扇子
+		addRecipe(getIS(FoldingFan.class), "PPB", "PPB", "BBB", 'P', Items.paper, 'B', bamboo);
+		// 袋
+		addRecipe(getIS(Sack.class), "SSS", "WTW", "WWW", 'S', Items.string, 'T', tudura, 'W', getIS(Blocks.wool, 1, WILD));
 	}
 
 	/**
@@ -56,8 +72,8 @@ public class BambooRecipes {
 		GameRegistry.registerFuelHandler(handler);
 	}
 
-	private void addRecipe(ItemStack output, Object[] params) {
-		GameRegistry.addRecipe(output, params);
+	private void addRecipe(ItemStack output, Object... params) {
+		GameRegistry.addRecipe(new ShapedOreRecipe(output, params));
 	}
 
 	private void addShapelessRecipe(Object... objArray) {
@@ -75,7 +91,7 @@ public class BambooRecipes {
 				params[i - 1] = objArray[i];
 			}
 		}
-		GameRegistry.addShapelessRecipe(output, params);
+		GameRegistry.addRecipe(new ShapelessOreRecipe(output, params));
 	}
 
 	private ItemStack getIS(Block block) {
