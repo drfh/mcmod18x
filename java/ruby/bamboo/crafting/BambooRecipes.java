@@ -10,6 +10,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import ruby.bamboo.block.SakuraLog;
 import ruby.bamboo.block.SakuraPlank;
 import ruby.bamboo.core.DataManager;
+import ruby.bamboo.item.Sack;
 
 public class BambooRecipes {
 	private int WILD = Short.MAX_VALUE;
@@ -27,6 +28,7 @@ public class BambooRecipes {
 	 */
 	public void craftingTableRecipes() {
 		addShapelessRecipe(getIS(SakuraPlank.class, 4, 0), SakuraLog.class);
+		addShapelessRecipe(getIS(Sack.class), getIS(Sack.class, 1, WILD));
 	}
 
 	/**

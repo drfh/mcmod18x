@@ -45,7 +45,7 @@ public class BambooCore {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
-
+		proxy.postInit();
 	}
 
 	/**

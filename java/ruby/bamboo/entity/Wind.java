@@ -23,24 +23,14 @@ public class Wind extends EntityThrowable {
 
 	public Wind(World par1World, EntityLivingBase par2EntityLiving) {
 		super(par1World, par2EntityLiving);
-		//yOffset = +1;
 		setSize(5F, 5F);
 		maxAge = 5;
 	}
 
-	/*
-	 * @Override public boolean canBeCollidedWith() { return !isDead; }
-	 * 
-	 * @Override public AxisAlignedBB getBoundingBox() { return boundingBox; }
-	 */
 	@Override
 	protected void onImpact(MovingObjectPosition var1) {
 		if (var1.entityHit instanceof EntityLivingBase) {
 			if (var1.entityHit.ridingEntity == null && var1.entityHit.riddenByEntity == null) {
-				// if (!Config.windPushPlayer && var1.entityHit instanceof
-				// EntityPlayer) {
-				// return;
-				// }
 
 				var1.entityHit.motionX = this.motionX;
 				var1.entityHit.motionY = this.motionY;
@@ -90,7 +80,7 @@ public class Wind extends EntityThrowable {
 			return true;
 		}
 		if (state.getBlock() instanceof BlockDoublePlant) {
-			// TODO: 背の高い草を追加する必要がある
+			// TODO: 背の高い草限定を追加する必要がある?
 			return true;
 		}
 		return false;

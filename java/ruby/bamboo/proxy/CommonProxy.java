@@ -1,12 +1,17 @@
 package ruby.bamboo.proxy;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import ruby.bamboo.core.BambooCore;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.init.DataLoader;
 import ruby.bamboo.core.init.EntityRegister;
 import ruby.bamboo.crafting.BambooRecipes;
+import ruby.bamboo.crafting.CraftingHandler;
 import ruby.bamboo.generate.GenerateHandler;
+import ruby.bamboo.gui.GuiHandler;
 
 /**
  * サーバープロクシ
@@ -29,12 +34,19 @@ public class CommonProxy {
 		// じぇねれーた
 		GenerateHandler gen = new GenerateHandler();
 		GameRegistry.registerWorldGenerator(gen, 1);
+		// クラフトハンドラ
+		FMLCommonHandler.instance().bus().register(new CraftingHandler());
 	}
 
 	public void init() {
 		this.registRecipe();
 		new EntityRegister().entityRegist();
 	}
+	
+	public void postInit(){
+		NetworkRegistry.INSTANCE.registerGuiHandler(BambooCore.instance, new GuiHandler());
+	}
+
 
 	// 鉱石名登録
 	private void registRecipe() {
@@ -44,5 +56,6 @@ public class CommonProxy {
 		recipeIns.smeltingRecipes();
 		recipeIns.registFuel();
 	}
+	
 
 }
