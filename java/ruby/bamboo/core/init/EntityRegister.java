@@ -18,14 +18,14 @@ public class EntityRegister {
 	private int windEID = 0;
 
 	public void entityRegist() {
-		//registerEntity(Wind.class, "wind", windEID);
+		registerEntity(Wind.class, "wind", windEID);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void renderRegist() {
 		RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 
-		//this.registRender(Wind.class, new RenderWind(manager));
+		this.registRender(Wind.class, new RenderWind(manager));
 		this.registRender(SakuraPetal.class, new RenderPetal(manager));
 	}
 

@@ -33,7 +33,9 @@ public class RenderPetal extends Render {
 		GL11.glScalef(0.5f, 0.5f, 0.5f);
 		GL11.glRotatef(180.0F, entity.getRx(), entity.getRy(), entity.getRz());
 		modelPetal.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+		GL11.glColor3f(1,1,1);
 		GL11.glPopMatrix();
+
 	}
 
 	@Override
