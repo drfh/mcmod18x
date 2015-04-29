@@ -5,9 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ruby.bamboo.core.Constants;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import ruby.bamboo.core.Constants;
 
 public @interface BambooData {
 
@@ -26,18 +25,19 @@ public @interface BambooData {
 
 		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
 
-
-//		boolean disableItem() default false;
+		// boolean disableItem() default false;
 
 		// stateを無視する用
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
-		public @interface StateIgnore{};
-		
+		public @interface StateIgnore {
+		};
+
 		// 特殊state用
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
-		public @interface StateCustom{};
+		public @interface StateCustom {
+		};
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
@@ -51,4 +51,5 @@ public @interface BambooData {
 
 		EnumCreateTab createiveTabs() default EnumCreateTab.NONE;
 	}
+
 }

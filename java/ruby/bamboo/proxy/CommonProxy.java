@@ -4,6 +4,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.init.DataLoader;
+import ruby.bamboo.core.init.EntityRegister;
 import ruby.bamboo.crafting.BambooRecipes;
 import ruby.bamboo.generate.GenerateHandler;
 
@@ -32,6 +33,7 @@ public class CommonProxy {
 
 	public void init() {
 		this.registRecipe();
+		new EntityRegister().entityRegist();
 	}
 
 	// 鉱石名登録

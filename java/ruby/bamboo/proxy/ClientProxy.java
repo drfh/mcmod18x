@@ -9,16 +9,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateCustom;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
+import ruby.bamboo.core.init.EntityRegister;
 
 /**
  * クライアントプロクシ
@@ -37,6 +36,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void init() {
 		super.init();
+		new EntityRegister().renderRegist();
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class ClientProxy extends CommonProxy {
 				ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(name, "inventory"));
 			} else {
 				for (int i = 0; i < isList.size(); i++) {
-					//jsonファイルをmeta毎切り替えたい場合に追加を考える、ご飯系とか？
-					//ModelBakery.addVariantName(item, name + i);
+					// jsonファイルをmeta毎切り替えたい場合に追加を考える、ご飯系とか？
+					// ModelBakery.addVariantName(item, name + i);
 					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(name, "inventory"));
 				}
 			}

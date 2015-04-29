@@ -22,16 +22,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 import ruby.bamboo.core.init.EnumCreateTab;
+import ruby.bamboo.entity.SakuraPetal;
+import ruby.bamboo.entity.SakuraPetal.ICustomPetal;
 import ruby.bamboo.item.itemblock.ItemSakuraLeave;
 
 import com.google.common.base.Predicate;
 
 @BambooBlock(name = "sakura_leave", itemBlock = ItemSakuraLeave.class, createiveTabs = EnumCreateTab.TAB_BAMBOO)
-public class SakuraLeave extends BlockLeaves implements ILeave {
+public class SakuraLeave extends BlockLeaves implements ILeave, ICustomPetal {
 
 	// クソゴミ仕様に合わせるのつらい
 	public final static PropertyEnum VARIANT = PropertyEnum.create("variant", EnumLeave.class, new Predicate()
@@ -166,7 +169,7 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (placer != null) {
-			worldIn.setBlockState(pos, state.withProperty(DECAYABLE, false),4);
+			worldIn.setBlockState(pos, state.withProperty(DECAYABLE, false), 4);
 		}
 	}
 
@@ -212,6 +215,41 @@ public class SakuraLeave extends BlockLeaves implements ILeave {
 			return this.name().toLowerCase();
 		}
 
+	}
+
+	@Override
+	public IBlockState getLeaveStateFromMeta(int meta) {
+		return this.getStateFromMeta(meta);
+	}
+
+	@Override
+	public int getLeaveRenderColor(IBlockState stateFromMeta) {
+		return this.getRenderColor(stateFromMeta);
+	}
+	
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        if (rand.nextInt(100) != 0) {
+            return;
+        }
+        if (world.isAirBlock(pos.down())) {
+        	SakuraPetal petal=new SakuraPetal(world);
+        	petal.setPosition(pos.getX()+ rand.nextFloat(),pos.getY(),pos.getZ()+ rand.nextFloat());
+        	petal.setCustomPetal(state);
+        	petal.setColor(this.getRenderColor(state));
+            world.spawnEntityInWorld(petal);
+        }
+    }
+
+	@Override
+	public int getTexNum(IBlockState state) {
+		return ((EnumLeave) state.getValue(VARIANT)).getPetal();
+	}
+
+	@Override
+	public String getTexPath(IBlockState state) {
+		return Constants.RESOURCED_DOMAIN + "textures/entitys/petal.png";
 	}
 
 }

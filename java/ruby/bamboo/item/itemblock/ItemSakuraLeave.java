@@ -32,7 +32,7 @@ public class ItemSakuraLeave extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int renderPass)
 	{
-		return this.leave.getRenderColor(this.leave.getStateFromMeta(stack.getMetadata()));
+		return this.leave.getLeaveRenderColor(this.leave.getLeaveStateFromMeta(stack.getMetadata()));
 	}
 
 	@Override

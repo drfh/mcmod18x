@@ -22,16 +22,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ruby.bamboo.block.SakuraLeave.EnumLeave;
+import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 import ruby.bamboo.core.init.EnumCreateTab;
+import ruby.bamboo.entity.SakuraPetal;
+import ruby.bamboo.entity.SakuraPetal.ICustomPetal;
 import ruby.bamboo.item.itemblock.ItemSakuraLeave;
 
 import com.google.common.base.Predicate;
 
 @BambooBlock(name = "broad_leave", itemBlock = ItemSakuraLeave.class, createiveTabs = EnumCreateTab.TAB_BAMBOO)
-public class BroadLeave extends BlockLeaves implements ILeave{
+public class BroadLeave extends BlockLeaves implements ILeave, ICustomPetal{
 
 	private static final int metaSlide=4;
 	// クソゴミ仕様に合わせるのつらい、なんで同じ処理2回も書かないといけないの？state回り設計した奴はマジで馬鹿なの？OleLeaveとNewLeave書いてる時に疑問持てよ無能
@@ -169,6 +172,42 @@ public class BroadLeave extends BlockLeaves implements ILeave{
 		if (placer != null) {
 			worldIn.setBlockState(pos, state.withProperty(DECAYABLE, false),4);
 		}
+	}
+
+	@Override
+	public IBlockState getLeaveStateFromMeta(int meta) {
+		return this.getStateFromMeta(meta);
+	}
+
+	@Override
+	public int getLeaveRenderColor(IBlockState stateFromMeta) {
+		return this.getRenderColor(stateFromMeta);
+	}
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        if (rand.nextInt(100) != 0) {
+            return;
+        }
+        if (world.isAirBlock(pos.down())) {
+        	SakuraPetal petal=new SakuraPetal(world);
+        	petal.setPosition(pos.getX()+ rand.nextFloat(),pos.getY(),pos.getZ()+ rand.nextFloat());
+        	petal.setCustomPetal(state);
+        	petal.setColor(this.getRenderColor(state));
+            world.spawnEntityInWorld(petal);
+        }
+    }
+
+	
+	@Override
+	public int getTexNum(IBlockState state) {
+		return ((EnumLeave) state.getValue(VARIANT)).getPetal();
+	}
+
+	@Override
+	public String getTexPath(IBlockState state) {
+		return Constants.RESOURCED_DOMAIN + "textures/entitys/petal.png";
 	}
 
 }

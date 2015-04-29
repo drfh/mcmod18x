@@ -38,8 +38,8 @@ public class Constants {
 	/**
 	 * パッケージパス
 	 */
-	public static final String BLOCK_PACKAGE = BambooShoot.class.getPackage().getName();
-	public static final String ITEM_PACKAGE = Tudura.class.getPackage().getName();
+	public static final String BLOCK_PACKAGE = "ruby.bamboo.block";
+	public static final String ITEM_PACKAGE = "ruby.bamboo.item";
 	
 	// 鉱石辞書名
 	public static final String ORE_BAMBOO="bamboo";
