@@ -7,6 +7,7 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -32,13 +33,11 @@ import ruby.bamboo.item.itemblock.ItemBamboo;
  */
 @BambooBlock(itemBlock = ItemBamboo.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
 public class Bamboo extends BlockBush implements IGrowable {
-	// 現在の長さ
-	public static final PropertyInteger AGE = PropertyInteger.create(Constants.AGE, 0, 15);
 	// 最大の長さ
-	public static final PropertyInteger MAX_LENGTH = PropertyInteger.create(Constants.META, 7, 15);
+	public static final PropertyInteger LENGTH = PropertyInteger.create(Constants.META, 0, 15);
 
 	public Bamboo(Material material) {
-		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0).withProperty(MAX_LENGTH, 10));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(LENGTH, 0));
 		this.setLightOpacity(0);
 		this.setTickRandomly(true);
 		this.setHardness(0.75F);
@@ -49,17 +48,17 @@ public class Bamboo extends BlockBush implements IGrowable {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(AGE, meta);
+		return this.getDefaultState().withProperty(LENGTH, meta);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((Integer) state.getValue(AGE)).intValue();
+		return ((Integer) state.getValue(LENGTH)).intValue();
 	}
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, AGE, MAX_LENGTH);
+		return new BlockState(this, LENGTH);
 	}
 
 	/**
@@ -71,24 +70,33 @@ public class Bamboo extends BlockBush implements IGrowable {
 		return Block.EnumOffsetType.XYZ;
 	}
 
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+		super.breakBlock(worldIn, pos, state);
+		BlockPos p = pos.down(this.getMetaFromState(state));
+		worldIn.destroyBlock(p, true);
+	}
+
 	private void tryBambooGrowth(World world, BlockPos pos, IBlockState state, float probability) {
 		if (!world.isRemote) {
 			if (world.isAirBlock(pos.up())) {
 				if (world.rand.nextFloat() < probability) {
 					int meta = this.getMetaFromState(state);
-
-					if (meta != 15) {
-						if (meta < this.getMaxLength(state)) {
-							this.growBamboo(world, pos, meta);
-						} else {
-							if (world.isRaining() || world.rand.nextFloat() < probability) {
-								this.tryChildSpawn(world, pos, state);
-							}
+					if (meta < this.getLength()) {
+						this.growBamboo(world, pos, meta);
+					} else {
+						if (world.isRaining() || world.rand.nextFloat() < probability) {
+							this.tryChildSpawn(world, pos, state);
 						}
 					}
 				}
 			}
 		}
+	}
+
+	int getLength() {
+		return 10;
 	}
 
 	@Override
@@ -98,24 +106,6 @@ public class Bamboo extends BlockBush implements IGrowable {
 
 	private void growBamboo(World world, BlockPos pos, int meta) {
 		world.setBlockState(pos.up(), this.getStateFromMeta(++meta));
-	}
-
-	private void tryChildSpawn(World world, IBlockState state, BlockPos pos) {
-		if (!world.isRemote) {
-			BlockPos p = pos.down(this.getMetaFromState(state));
-
-			for (int i1 = -1; i1 <= 1; i1++) {
-				for (int j1 = -1; j1 <= 1; j1++) {
-					for (int k1 = -1; k1 <= 1; k1++) {
-						BlockPos p2 = p.add(i1, j1, k1);
-						if (canChildSpawn(world, p2, state)) {
-							world.setBlockState(p2.down(), Blocks.dirt.getDefaultState());
-							world.setBlockState(p2, DataManager.getState(BambooShoot.class));
-						}
-					}
-				}
-			}
-		}
 	}
 
 	private boolean canChildSpawn(World world, BlockPos pos, IBlockState state) {
@@ -136,15 +126,10 @@ public class Bamboo extends BlockBush implements IGrowable {
 		if (!world.isRemote) {
 			BlockPos p = pos.down(this.getMetaFromState(state));
 
-			for (int i1 = -1; i1 <= 1; i1++) {
-				for (int j1 = -1; j1 <= 1; j1++) {
-					for (int k1 = -1; k1 <= 1; k1++) {
-						BlockPos p2 = p.add(i1, j1, k1);
-						if (this.canChildSpawn(world, p2, state)) {
-							world.setBlockState(p2.down(), Blocks.dirt.getDefaultState());
-							world.setBlockState(p2, DataManager.getState(BambooShoot.class));
-						}
-					}
+			for (BlockPos target : (Iterable<BlockPos>) BlockPos.getAllInBox(p.add(-1, -1, -1), p.add(1, 1, 1))) {
+				if (this.canChildSpawn(world, target, state)) {
+					world.setBlockState(target.down(), Blocks.dirt.getDefaultState());
+					world.setBlockState(target, DataManager.getState(BambooShoot.class));
 				}
 			}
 		}
@@ -155,14 +140,8 @@ public class Bamboo extends BlockBush implements IGrowable {
 		return super.canPlaceBlockOn(ground) || ground == this;
 	}
 
-	private int getMaxLength(IBlockState state) {
-		return ((Integer) state.getValue(MAX_LENGTH)).intValue();
-	}
-
 	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-
-	}
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {}
 
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
@@ -177,10 +156,10 @@ public class Bamboo extends BlockBush implements IGrowable {
 	@Override
 	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
 		BlockPos tmp = pos;
-		while (!world.isAirBlock(tmp.up())) {
-			tmp = tmp.up();
+		while (!world.isAirBlock(tmp = tmp.up())) {
+			pos = tmp;
 		}
-		this.tryBambooGrowth(world, tmp, state, 0.75F);
+		this.tryBambooGrowth(world, pos, world.getBlockState(pos), 0.65F);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -190,6 +169,6 @@ public class Bamboo extends BlockBush implements IGrowable {
 
 	@StateIgnore
 	public IProperty[] getIgnoreState() {
-		return new IProperty[] { AGE, MAX_LENGTH };
+		return new IProperty[] {LENGTH };
 	}
 }
