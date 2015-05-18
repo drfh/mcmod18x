@@ -2,32 +2,26 @@ package ruby.bamboo.block;
 
 import java.util.List;
 
-import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.init.BambooData.BambooBlock;
-import ruby.bamboo.core.init.BambooData.BambooBlock.StateCustom;
 import ruby.bamboo.core.init.EnumCreateTab;
 import ruby.bamboo.core.init.EnumMaterial;
 
 @BambooBlock(name = "sakura_planks", createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.GROUND)
-public class SakuraPlank extends AxisBase {
+public class SakuraPlank extends AxisBase implements ICustomState {
 	public static final PropertyEnum VARIANT = PropertyEnum.create("variant", SakuraPlank.EnumType.class);
 
 	public SakuraPlank(Material materialIn) {
@@ -37,8 +31,8 @@ public class SakuraPlank extends AxisBase {
 		this.setResistance(1F);
 	}
 
-	@StateCustom
-	public IStateMapper getCustomState() {
+	@Override
+	public Object getCustomState() {
 		return (new StateMap.Builder()).setProperty(VARIANT).setBuilderSuffix("_planks").build();
 	}
 
@@ -61,7 +55,7 @@ public class SakuraPlank extends AxisBase {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { VARIANT,AXIS });
+		return new BlockState(this, new IProperty[] { VARIANT, AXIS });
 	}
 
 	// あとから種類増やして拡張する…？

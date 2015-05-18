@@ -14,8 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
+import ruby.bamboo.block.ICustomState;
 import ruby.bamboo.core.DataManager;
-import ruby.bamboo.core.init.BambooData.BambooBlock.StateCustom;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 import ruby.bamboo.core.init.EntityRegister;
 
@@ -69,15 +69,12 @@ public class ClientProxy extends CommonProxy {
 	 * @param block
 	 */
 	private <T> void setCustomState(T obj) {
-		Method method = this.getMethod(obj, StateCustom.class);
-		if (method != null) {
+		if (obj instanceof ICustomState) {
 			try {
-				IStateMapper state = (IStateMapper) method.invoke(obj);
-				if (state != null) {
-					ModelLoader.setCustomStateMapper((Block) obj, state);
-				}
+				IStateMapper state = (IStateMapper) ((ICustomState) obj).getCustomState();
+				ModelLoader.setCustomStateMapper((Block) obj, state);
 			} catch (Exception e) {
-				FMLLog.warning(obj.getClass().getName() + "Custom State Error");
+				FMLLog.warning(obj.getClass().getName() + ": Custom State Error");
 			}
 		}
 	}

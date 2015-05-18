@@ -4,6 +4,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import ruby.bamboo.block.tile.TileJPChest;
 import ruby.bamboo.core.BambooCore;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.init.DataLoader;
@@ -36,17 +37,17 @@ public class CommonProxy {
 		GameRegistry.registerWorldGenerator(gen, 1);
 		// クラフトハンドラ
 		FMLCommonHandler.instance().bus().register(new CraftingHandler());
+		GameRegistry.registerTileEntity(TileJPChest.class, "jpchest");
 	}
 
 	public void init() {
 		this.registRecipe();
 		new EntityRegister().entityRegist();
 	}
-	
-	public void postInit(){
+
+	public void postInit() {
 		NetworkRegistry.INSTANCE.registerGuiHandler(BambooCore.instance, new GuiHandler());
 	}
-
 
 	// 鉱石名登録
 	private void registRecipe() {
@@ -56,6 +57,5 @@ public class CommonProxy {
 		recipeIns.smeltingRecipes();
 		recipeIns.registFuel();
 	}
-	
 
 }

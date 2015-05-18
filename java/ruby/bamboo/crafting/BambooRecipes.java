@@ -11,6 +11,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import ruby.bamboo.block.Bamboo;
+import ruby.bamboo.block.JPChest;
 import ruby.bamboo.block.SakuraLog;
 import ruby.bamboo.block.SakuraPlank;
 import ruby.bamboo.core.DataManager;
@@ -41,11 +42,14 @@ public class BambooRecipes {
 		addShapelessRecipe(getIS(SakuraPlank.class, 4, 0), SakuraLog.class);
 		// 袋開放
 		addShapelessRecipe(getIS(Sack.class), getIS(Sack.class, 1, WILD));
+		// つづら
 		addRecipe(getIS(Tudura.class), " T ","T T"," T ",'T',tudura);
 		// 扇子
 		addRecipe(getIS(FoldingFan.class), "PPB", "PPB", "BBB", 'P', Items.paper, 'B', bamboo);
 		// 袋
 		addRecipe(getIS(Sack.class), "SSS", "WTW", "WWW", 'S', Items.string, 'T', tudura, 'W', getIS(Blocks.wool, 1, WILD));
+		// たんす
+		addRecipe(getIS(JPChest.class), "WWW","WTW","WWW",'W',"logWood",'T',tudura);
 	}
 
 	/**

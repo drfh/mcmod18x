@@ -7,7 +7,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -15,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ruby.bamboo.core.init.BambooData.BambooBlock;
-import ruby.bamboo.core.init.BambooData.BambooBlock.StateCustom;
 import ruby.bamboo.core.init.EnumCreateTab;
 
 /*
@@ -25,7 +23,7 @@ import ruby.bamboo.core.init.EnumCreateTab;
  */
 
 @BambooBlock(name = "sakura_log", createiveTabs = EnumCreateTab.TAB_BAMBOO)
-public class SakuraLog extends BlockLog {
+public class SakuraLog extends BlockLog implements ICustomState {
 	public static final PropertyEnum VARIANT = PropertyEnum.create("variant", SakuraPlank.EnumType.class);
 
 	public SakuraLog() {
@@ -112,8 +110,8 @@ public class SakuraLog extends BlockLog {
 		}
 	}
 
-	@StateCustom
-	public IStateMapper getCustomState() {
+	@Override
+	public Object getCustomState() {
 		return (new StateMap.Builder()).setProperty(VARIANT).setBuilderSuffix("_log").build();
 	}
 }
