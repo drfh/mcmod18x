@@ -1,10 +1,10 @@
 package ruby.bamboo.item;
 
-import net.minecraft.item.Item;
-import ruby.bamboo.core.init.BambooData.BambooItem;
 import ruby.bamboo.core.init.EnumCreateTab;
+import ruby.bamboo.core.init.BambooData.BambooItem;
+import net.minecraft.item.Item;
 
 @BambooItem(createiveTabs = EnumCreateTab.TAB_BAMBOO)
-public class Tudura extends Item {
+public class Straw extends Item{
 
 }

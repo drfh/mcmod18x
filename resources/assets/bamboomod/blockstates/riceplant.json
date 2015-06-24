@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "age=0": { "model": "bamboomod:rice_stage0" },
+        "age=1": { "model": "bamboomod:rice_stage1" },
+        "age=2": { "model": "bamboomod:rice_stage2" },
+        "age=3": { "model": "bamboomod:rice_stage3" },
+        "age=4": { "model": "bamboomod:rice_stage4" }
+    }
+}

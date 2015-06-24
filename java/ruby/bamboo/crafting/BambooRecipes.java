@@ -43,7 +43,7 @@ public class BambooRecipes {
 		// 袋開放
 		addShapelessRecipe(getIS(Sack.class), getIS(Sack.class, 1, WILD));
 		// つづら
-		addRecipe(getIS(Tudura.class), " T ","T T"," T ",'T',tudura);
+		addRecipe(getIS(Tudura.class), " B ","B B"," B ",'B',bamboo);
 		// 扇子
 		addRecipe(getIS(FoldingFan.class), "PPB", "PPB", "BBB", 'P', Items.paper, 'B', bamboo);
 		// 袋
