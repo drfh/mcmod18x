@@ -9,21 +9,24 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
 import ruby.bamboo.block.ICustomState;
+import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 import ruby.bamboo.core.init.EntityRegister;
+import ruby.bamboo.item.itemblock.ISubTexture;
 
 /**
  * クライアントプロクシ
- * 
+ *
  * @author Ruby
- * 
+ *
  */
 public class ClientProxy extends CommonProxy {
 
@@ -40,7 +43,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	/**
-	 * json登録の自動化 1IDに対して複数タイプは名前の後ろに0(連番)付与
+	 * json登録の自動化
 	 */
 	private void registJson() {
 		List<ItemStack> isList = new ArrayList<ItemStack>();
@@ -51,12 +54,15 @@ public class ClientProxy extends CommonProxy {
 			item.getSubItems(item, item.getCreativeTab(), isList);
 			this.setIgnoreState(DataManager.getBlock(DataManager.getClass(name)));
 			this.setCustomState(DataManager.getBlock(DataManager.getClass(name)));
-			if (isList.size() == 1) {
-				ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(name, "inventory"));
+			if (item instanceof ISubTexture) {
+				String[] names= ((ISubTexture)item).getName();
+				for (int i = 0; i < names.length; i++) {
+					String jsonName = Constants.MODID + Constants.DMAIN_SEPARATE + names[i];
+					ModelBakery.addVariantName(item, jsonName);
+					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(jsonName, "inventory"));
+				}
 			} else {
 				for (int i = 0; i < isList.size(); i++) {
-					// jsonファイルをmeta毎切り替えたい場合に追加を考える、ご飯系とか？
-					// ModelBakery.addVariantName(item, name + i);
 					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(name, "inventory"));
 				}
 			}
@@ -65,7 +71,7 @@ public class ClientProxy extends CommonProxy {
 
 	/**
 	 * カスタムstate設定
-	 * 
+	 *
 	 * @param block
 	 */
 	private <T> void setCustomState(T obj) {
@@ -81,7 +87,7 @@ public class ClientProxy extends CommonProxy {
 
 	/**
 	 * stateをmodel参照時無視する
-	 * 
+	 *
 	 * @param <T>
 	 */
 	private <T> void setIgnoreState(T obj) {
@@ -101,7 +107,7 @@ public class ClientProxy extends CommonProxy {
 
 	/**
 	 * アノテーション付きメソッド探索
-	 * 
+	 *
 	 * @param obj
 	 * @param ano
 	 * @return

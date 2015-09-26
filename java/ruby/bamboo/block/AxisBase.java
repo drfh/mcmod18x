@@ -13,7 +13,7 @@ public class AxisBase extends BlockRotatedPillar{
 	protected AxisBase(Material materialIn) {
 		super(materialIn);
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing.Axis axis = EnumFacing.Axis.Y;
@@ -41,7 +41,7 @@ public class AxisBase extends BlockRotatedPillar{
 
 		return i;
 	}
-	
+
 	@Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
@@ -49,7 +49,7 @@ public class AxisBase extends BlockRotatedPillar{
 		if(facing.getAxis() == EnumFacing.Axis.Y){
 			dir=placer.getHorizontalFacing();
 		}
-        return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS, dir.getAxis());
+        return this.getStateFromMeta(meta).withProperty(AXIS, dir.getAxis());
     }
 
 }

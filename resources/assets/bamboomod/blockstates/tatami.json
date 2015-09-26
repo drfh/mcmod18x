@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "axis=y,meta=0":  { "model": "bamboomod:tatami" },
+        "axis=z,meta=0":   { "model": "bamboomod:tatami", "y": 90 },
+        "axis=x,meta=0":   { "model": "bamboomod:tatami", "y": 90 },
+        "axis=none,meta=0": { "model": "bamboomod:tatami" },
+        "axis=y,meta=1":  { "model": "bamboomod:tatami_ns" },
+        "axis=z,meta=1":   { "model": "bamboomod:tatami_ns", "y": 90 },
+        "axis=x,meta=1":   { "model": "bamboomod:tatami_ns", "y": 90 },
+        "axis=none,meta=1": { "model": "bamboomod:tatami_ns" }
+    }
+}

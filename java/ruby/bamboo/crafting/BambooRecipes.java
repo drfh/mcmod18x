@@ -14,15 +14,18 @@ import ruby.bamboo.block.Bamboo;
 import ruby.bamboo.block.JPChest;
 import ruby.bamboo.block.SakuraLog;
 import ruby.bamboo.block.SakuraPlank;
+import ruby.bamboo.block.Tatami;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.item.FoldingFan;
 import ruby.bamboo.item.Sack;
+import ruby.bamboo.item.Straw;
 import ruby.bamboo.item.Tudura;
 
 public class BambooRecipes {
 	private int WILD = Short.MAX_VALUE;
 	private String bamboo = "bamboo";
 	private String tudura = "tudura";
+	private String straw = "straw";
 
 	/**
 	 * 鉱石辞書
@@ -32,6 +35,7 @@ public class BambooRecipes {
 		OreDictionary.registerOre("plankWood", getIS(SakuraPlank.class));
 		OreDictionary.registerOre(bamboo, getIS(Bamboo.class));
 		OreDictionary.registerOre(tudura, getIS(Tudura.class));
+		OreDictionary.registerOre(straw, getIS(Straw.class));
 	}
 
 	/**
@@ -50,6 +54,9 @@ public class BambooRecipes {
 		addRecipe(getIS(Sack.class), "SSS", "WTW", "WWW", 'S', Items.string, 'T', tudura, 'W', getIS(Blocks.wool, 1, WILD));
 		// たんす
 		addRecipe(getIS(JPChest.class), "WWW","WTW","WWW",'W',"logWood",'T',tudura);
+		// たたみ
+		addRecipe(getIS(Tatami.class), " S ","STS"," S ",'S',straw,'T',tudura);
+
 	}
 
 	/**
