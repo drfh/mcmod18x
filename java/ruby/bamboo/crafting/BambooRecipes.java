@@ -16,6 +16,8 @@ import ruby.bamboo.block.SakuraLog;
 import ruby.bamboo.block.SakuraPlank;
 import ruby.bamboo.block.Tatami;
 import ruby.bamboo.core.DataManager;
+import ruby.bamboo.entity.EnumSlideDoor;
+import ruby.bamboo.entity.SlideDoor;
 import ruby.bamboo.item.FoldingFan;
 import ruby.bamboo.item.Sack;
 import ruby.bamboo.item.Straw;
@@ -56,6 +58,13 @@ public class BambooRecipes {
 		addRecipe(getIS(JPChest.class), "WWW","WTW","WWW",'W',"logWood",'T',tudura);
 		// たたみ
 		addRecipe(getIS(Tatami.class), " S ","STS"," S ",'S',straw,'T',tudura);
+        // 引き戸類
+        addRecipe(getIS(SlideDoor.class, 2, EnumSlideDoor.HUSUMA.getId()), "XYX", "X#X", "XYX", 'X', Items.stick, 'Y', Items.paper, '#', tudura);
+        addRecipe(getIS(SlideDoor.class, 2, EnumSlideDoor.SHOZI.getId()), "XYX", "Y#Y", "XYX", '#', tudura, 'X', Items.stick, 'Y', Items.paper);
+        addRecipe(getIS(SlideDoor.class, 2, EnumSlideDoor.GLASS.getId()), "XYX", "X#X", "XYX", '#', tudura, 'X', Blocks.iron_bars, 'Y', Blocks.glass_pane);
+        addRecipe(getIS(SlideDoor.class, 2, EnumSlideDoor.GGLASS.getId()), "XYX", "X#X", "XYX", '#', tudura, 'X', Items.stick, 'Y', Blocks.glass_pane);
+        addRecipe(getIS(SlideDoor.class, 2, EnumSlideDoor.YUKI.getId()), "XYX", "X#X", "XZX", '#', tudura, 'X', Items.stick, 'Y', Items.paper, 'Z', Blocks.glass_pane);
+        addRecipe(getIS(SlideDoor.class, 2, EnumSlideDoor.AMADO.getId()), "XYX", "X#X", "XYX", '#', tudura, 'X', Items.stick, 'Y', "plankWood");
 
 	}
 

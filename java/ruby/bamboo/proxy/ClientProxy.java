@@ -20,6 +20,7 @@ import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
 import ruby.bamboo.core.init.EntityRegister;
+import ruby.bamboo.item.itemblock.IEnumTex;
 import ruby.bamboo.item.itemblock.ISubTexture;
 
 /**
@@ -30,99 +31,98 @@ import ruby.bamboo.item.itemblock.ISubTexture;
  */
 public class ClientProxy extends CommonProxy {
 
-	@Override
-	public void preInit() {
-		super.preInit();
-		this.registJson();
-	}
+    @Override
+    public void preInit() {
+        super.preInit();
+        this.registJson();
+    }
 
-	@Override
-	public void init() {
-		super.init();
-		new EntityRegister().renderRegist();
-	}
+    @Override
+    public void init() {
+        super.init();
+        new EntityRegister().renderRegist();
+    }
 
-	/**
-	 * json登録の自動化
-	 */
-	private void registJson() {
-		List<ItemStack> isList = new ArrayList<ItemStack>();
-		List<String> tmpNameList = new ArrayList<String>();
-		for (String name : DataManager.getRegstedNameArray()) {
-			Item item = Item.getByNameOrId(name);
-			isList.clear();
-			item.getSubItems(item, item.getCreativeTab(), isList);
-			this.setIgnoreState(DataManager.getBlock(DataManager.getClass(name)));
-			this.setCustomState(DataManager.getBlock(DataManager.getClass(name)));
-			if (item instanceof ISubTexture) {
-				String[] names= ((ISubTexture)item).getName();
-				for (int i = 0; i < names.length; i++) {
-					String jsonName = Constants.MODID + Constants.DMAIN_SEPARATE + names[i];
-					ModelBakery.addVariantName(item, jsonName);
-					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(jsonName, "inventory"));
-				}
-			} else {
-				for (int i = 0; i < isList.size(); i++) {
-					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(name, "inventory"));
-				}
-			}
-		}
-	}
+    /**
+     * json登録の自動化
+     */
+    private void registJson() {
+        List<ItemStack> isList = new ArrayList<ItemStack>();
+        List<String> tmpNameList = new ArrayList<String>();
+        for (String name : DataManager.getRegstedNameArray()) {
+            Item item = Item.getByNameOrId(name);
+            isList.clear();
+            item.getSubItems(item, item.getCreativeTab(), isList);
+            this.setIgnoreState(DataManager.getBlock(DataManager.getClass(name)));
+            this.setCustomState(DataManager.getBlock(DataManager.getClass(name)));
+            if (item instanceof ISubTexture) {
+                for (IEnumTex tex : ((ISubTexture) item).getName()) {
+                    String jsonName = Constants.MODID + Constants.DMAIN_SEPARATE + tex.getJsonName();
+                    ModelBakery.addVariantName(item, jsonName);
+                    ModelLoader.setCustomModelResourceLocation(item, tex.getId(), new ModelResourceLocation(jsonName, "inventory"));
+                }
+            } else {
+                for (int i = 0; i < isList.size(); i++) {
+                    ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(name, "inventory"));
+                }
+            }
+        }
+    }
 
-	/**
-	 * カスタムstate設定
-	 *
-	 * @param block
-	 */
-	private <T> void setCustomState(T obj) {
-		if (obj instanceof ICustomState) {
-			try {
-				IStateMapper state = (IStateMapper) ((ICustomState) obj).getCustomState();
-				ModelLoader.setCustomStateMapper((Block) obj, state);
-			} catch (Exception e) {
-				FMLLog.warning(obj.getClass().getName() + ": Custom State Error");
-			}
-		}
-	}
+    /**
+     * カスタムstate設定
+     *
+     * @param block
+     */
+    private <T> void setCustomState(T obj) {
+        if (obj instanceof ICustomState) {
+            try {
+                IStateMapper state = (IStateMapper) ((ICustomState) obj).getCustomState();
+                ModelLoader.setCustomStateMapper((Block) obj, state);
+            } catch (Exception e) {
+                FMLLog.warning(obj.getClass().getName() + ": Custom State Error");
+            }
+        }
+    }
 
-	/**
-	 * stateをmodel参照時無視する
-	 *
-	 * @param <T>
-	 */
-	private <T> void setIgnoreState(T obj) {
-		Method method = this.getMethod(obj, StateIgnore.class);
+    /**
+     * stateをmodel参照時無視する
+     *
+     * @param <T>
+     */
+    private <T> void setIgnoreState(T obj) {
+        Method method = this.getMethod(obj, StateIgnore.class);
 
-		if (method != null) {
-			try {
-				IProperty[] prop = (IProperty[]) method.invoke(obj);
-				if (prop != null) {
-					ModelLoader.setCustomStateMapper((Block) obj, (new StateMap.Builder()).addPropertiesToIgnore(prop).build());
-				}
-			} catch (Exception e) {
-				FMLLog.warning(obj.getClass().getName() + "Ignore State Error");
-			}
-		}
-	}
+        if (method != null) {
+            try {
+                IProperty[] prop = (IProperty[]) method.invoke(obj);
+                if (prop != null) {
+                    ModelLoader.setCustomStateMapper((Block) obj, (new StateMap.Builder()).addPropertiesToIgnore(prop).build());
+                }
+            } catch (Exception e) {
+                FMLLog.warning(obj.getClass().getName() + "Ignore State Error");
+            }
+        }
+    }
 
-	/**
-	 * アノテーション付きメソッド探索
-	 *
-	 * @param obj
-	 * @param ano
-	 * @return
-	 */
-	private <T> Method getMethod(T obj, Class<? extends Annotation> ano) {
-		if (obj == null) {
-			return null;
-		}
-		Method method = null;
-		for (Method e : obj.getClass().getDeclaredMethods()) {
-			if (e.getAnnotation(ano) != null) {
-				method = e;
-				break;
-			}
-		}
-		return method;
-	}
+    /**
+     * アノテーション付きメソッド探索
+     *
+     * @param obj
+     * @param ano
+     * @return
+     */
+    private <T> Method getMethod(T obj, Class<? extends Annotation> ano) {
+        if (obj == null) {
+            return null;
+        }
+        Method method = null;
+        for (Method e : obj.getClass().getDeclaredMethods()) {
+            if (e.getAnnotation(ano) != null) {
+                method = e;
+                break;
+            }
+        }
+        return method;
+    }
 }

@@ -10,15 +10,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ruby.bamboo.core.BambooCore;
 import ruby.bamboo.entity.SakuraPetal;
+import ruby.bamboo.entity.SlideDoor;
 import ruby.bamboo.entity.Wind;
 import ruby.bamboo.render.entity.RenderPetal;
+import ruby.bamboo.render.entity.RenderSlideDoor;
 import ruby.bamboo.render.entity.RenderWind;
 
 public class EntityRegister {
 	private int windEID = 0;
+	private int slideDoorEID =1;
 
 	public void entityRegist() {
 		registerEntity(Wind.class, "wind", windEID);
+        registerEntity(SlideDoor.class, "slideDoor", slideDoorEID);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -27,6 +31,7 @@ public class EntityRegister {
 
 		this.registRender(Wind.class, new RenderWind(manager));
 		this.registRender(SakuraPetal.class, new RenderPetal(manager));
+        this.registRender(SlideDoor.class, new RenderSlideDoor(manager));
 	}
 
 	private void registerEntity(Class entityClass, String entityName, int id) {
@@ -34,7 +39,7 @@ public class EntityRegister {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param entityClass
 	 * @param entityName
 	 * @param id

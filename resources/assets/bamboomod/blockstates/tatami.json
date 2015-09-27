@@ -7,6 +7,14 @@
         "axis=y,meta=1":  { "model": "bamboomod:tatami_ns" },
         "axis=z,meta=1":   { "model": "bamboomod:tatami_ns", "y": 90 },
         "axis=x,meta=1":   { "model": "bamboomod:tatami_ns", "y": 90 },
-        "axis=none,meta=1": { "model": "bamboomod:tatami_ns" }
+        "axis=none,meta=1": { "model": "bamboomod:tatami_ns" },
+        "axis=y,meta=2":  { "model": "bamboomod:tatami_tan" },
+        "axis=z,meta=2":   { "model": "bamboomod:tatami_tan", "y": 90 },
+        "axis=x,meta=2":   { "model": "bamboomod:tatami_tan", "y": 90 },
+        "axis=none,meta=2": { "model": "bamboomod:tatami_tan" },
+        "axis=y,meta=3":  { "model": "bamboomod:tatami_tan_ns" },
+        "axis=z,meta=3":   { "model": "bamboomod:tatami_tan_ns", "y": 90 },
+        "axis=x,meta=3":   { "model": "bamboomod:tatami_tan_ns", "y": 90 },
+        "axis=none,meta=3": { "model": "bamboomod:tatami_tan_ns" }
     }
 }

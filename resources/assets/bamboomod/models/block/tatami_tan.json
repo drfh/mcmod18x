@@ -1,0 +1,7 @@
+{
+    "parent": "block/column_side",
+    "textures": {
+        "end": "bamboomod:blocks/tatami_tan_x",
+        "side": "bamboomod:blocks/tatami_tan_x"
+    }
+}

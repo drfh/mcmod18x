@@ -1,5 +1,5 @@
 package ruby.bamboo.item.itemblock;
 
 public interface ISubTexture {
-	public String[] getName();
+	public IEnumTex[] getName();
 }

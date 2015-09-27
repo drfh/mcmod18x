@@ -21,53 +21,53 @@ import ruby.bamboo.core.init.BambooData.BambooBlock;
 import ruby.bamboo.core.init.EnumCreateTab;
 import ruby.bamboo.item.itemblock.ItemTatami;
 
-@BambooBlock(createiveTabs = EnumCreateTab.TAB_BAMBOO, itemBlock = ItemTatami.class)
+@BambooBlock(createiveTabs = EnumCreateTab.TAB_BAMBOO,
+        itemBlock = ItemTatami.class)
 public class Tatami extends XZAxisBlock {
 
-	public static final PropertyInteger META = PropertyInteger.create(Constants.META, 0, 1);
+    public static final PropertyInteger META = PropertyInteger.create(Constants.META, 0, 3);
 
-	public Tatami() {
-		super(Material.ground);
-		this.setDefaultState(
-				this.blockState.getBaseState().withProperty(META, 0).withProperty(AXIS, EnumFacing.Axis.X));
-	}
+    public Tatami() {
+        super(Material.ground);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(META, 0).withProperty(AXIS, EnumFacing.Axis.X));
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
-		list.add(new ItemStack(itemIn, 1, 0));
-		list.add(new ItemStack(itemIn, 1, 1));
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, List list) {
+        list.add(new ItemStack(itemIn, 1, 0));
+        list.add(new ItemStack(itemIn, 1, 1));
+        list.add(new ItemStack(itemIn, 1, 2));
+        list.add(new ItemStack(itemIn, 1, 3));
+    }
 
-	@Override
-	int getBlockMeta(IBlockState state) {
-		return ((Integer) state.getValue(META)).intValue() & 7;
-	}
+    @Override
+    int getBlockMeta(IBlockState state) {
+        return ((Integer) state.getValue(META)).intValue() & 7;
+    }
 
-	@Override
-	IBlockState setBlockMeta(IBlockState state, int meta) {
-		return state.withProperty(META, meta & 7);
-	}
+    @Override
+    IBlockState setBlockMeta(IBlockState state, int meta) {
+        return state.withProperty(META, meta & 7);
+    }
 
-	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { META, AXIS });
-	}
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[] { META, AXIS });
+    }
 
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumFacing side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        return false;
+    }
 
-	@Override
-	public int damageDropped(IBlockState state) {
-		return ((Integer) state.getValue(META)).intValue() & 7;
-	}
+    @Override
+    public int damageDropped(IBlockState state) {
+        return ((Integer) state.getValue(META)).intValue() & 7;
+    }
 
-	@Override
-	protected ItemStack createStackedBlock(IBlockState state)
-	{
-		return new ItemStack(Item.getItemFromBlock(this), 1, getBlockMeta( state));
-	}
+    @Override
+    protected ItemStack createStackedBlock(IBlockState state) {
+        return new ItemStack(Item.getItemFromBlock(this), 1, getBlockMeta(state));
+    }
 
 }
