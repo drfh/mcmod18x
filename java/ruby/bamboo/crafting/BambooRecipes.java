@@ -164,7 +164,7 @@ public class BambooRecipes {
             is = new ItemStack(DataManager.getItem(cls), amo, meta);
         }
         if (is.getItem() == null) {
-            throw new NullPointerException("Illegal recipe!" + cls.getSimpleName());
+            throw new IllegalArgumentException("Illegal recipe!" + cls.getSimpleName());
         }
         return is;
     }
