@@ -32,6 +32,7 @@ public class ItemSlideDoor extends Item implements ISubTexture {
         }
     }
 
+    @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             stack.stackSize--;
