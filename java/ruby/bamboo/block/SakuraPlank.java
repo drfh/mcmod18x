@@ -15,7 +15,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.init.BambooData.BambooBlock;
 import ruby.bamboo.core.init.EnumCreateTab;
 import ruby.bamboo.core.init.EnumMaterial;
@@ -101,7 +100,7 @@ public class SakuraPlank extends AxisBase implements ICustomState {
 
 		@Override
 		public String getName() {
-			return Constants.RESOURCED_DOMAIN + this.name;
+			return  this.name;
 		}
 
 		public String getUnlocalizedName() {

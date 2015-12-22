@@ -8,7 +8,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class AxisBase extends BlockRotatedPillar{
+public class AxisBase extends BlockRotatedPillar {
 
 	protected AxisBase(Material materialIn) {
 		super(materialIn);
@@ -43,13 +43,13 @@ public class AxisBase extends BlockRotatedPillar{
 	}
 
 	@Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-		EnumFacing dir=facing;
-		if(facing.getAxis() == EnumFacing.Axis.Y){
-			dir=placer.getHorizontalFacing();
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer) {
+		EnumFacing dir = facing;
+		if (facing.getAxis() == EnumFacing.Axis.Y) {
+			dir = placer.getHorizontalFacing();
 		}
-        return this.getStateFromMeta(meta).withProperty(AXIS, dir.getAxis());
-    }
+		return this.getStateFromMeta(meta).withProperty(AXIS, dir.getAxis());
+	}
 
 }
