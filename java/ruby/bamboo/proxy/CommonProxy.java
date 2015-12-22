@@ -16,9 +16,9 @@ import ruby.bamboo.gui.GuiHandler;
 
 /**
  * サーバープロクシ
- * 
+ *
  * @author Ruby
- * 
+ *
  */
 public class CommonProxy {
 	public void preInit() {
@@ -49,13 +49,14 @@ public class CommonProxy {
 		NetworkRegistry.INSTANCE.registerGuiHandler(BambooCore.instance, new GuiHandler());
 	}
 
-	// 鉱石名登録
+	// 鉱石名等登録
 	private void registRecipe() {
 		BambooRecipes recipeIns = new BambooRecipes();
 		recipeIns.oreDicRegist();
 		recipeIns.craftingTableRecipes();
 		recipeIns.smeltingRecipes();
 		recipeIns.registFuel();
+		recipeIns.registSeed();
 	}
 
 }
