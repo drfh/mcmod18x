@@ -18,6 +18,7 @@ public class Constants {
 	public static final String META = "meta";
 	public static final String TYPE = "type";
 	public static final String AGE = "age";
+    public static final String FLG = "flg";
 
 	//せぱれー
 	/**

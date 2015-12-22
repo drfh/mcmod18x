@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "flg=true": { "model": "bamboomod:kitunebi" },
+        "flg=false": { "model": "bamboomod:kitunebi_invisible" }
+    }
+}
