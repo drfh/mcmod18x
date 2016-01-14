@@ -11,8 +11,6 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
@@ -28,9 +26,9 @@ import ruby.bamboo.item.itemblock.ItemBamboo;
 
 /**
  * ばんぼー
- * 
+ *
  * @author Ruby
- * 
+ *
  */
 @BambooBlock(itemBlock = ItemBamboo.class, createiveTabs = EnumCreateTab.TAB_BAMBOO, material = EnumMaterial.PLANTS)
 public class Bamboo extends BlockBush implements IGrowable {
@@ -68,7 +66,7 @@ public class Bamboo extends BlockBush implements IGrowable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Block.EnumOffsetType getOffsetType() {
-		return Block.EnumOffsetType.XYZ;
+		return Block.EnumOffsetType.XZ;
 	}
 
 	@Override
