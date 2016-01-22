@@ -76,29 +76,27 @@ public abstract class GrowableBase extends BlockBush implements IGrowable {
 
             if (l < this.getMaxGrowthStage()) {
                 float f = this.getGrowRate(state.getBlock(), world, pos);
-
                 if (rand.nextInt((int) (25.0F / f) + 1) == 0) {
                     ++l;
-                    state.withProperty(AGE, l);
-                    world.setBlockState(pos, state, 2);
+                    world.setBlockState(pos, state.withProperty(AGE, l), 2);
                 }
             }
         }
     }
 
-    public float getGrowRate(Block block, World world, BlockPos pos) {
+    public float getGrowRate(Block blockIn, World worldIn, BlockPos pos) {
         float f = 1.0F;
         BlockPos blockpos1 = pos.down();
 
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; ++j) {
                 float f1 = 0.0F;
-                IBlockState iblockstate = world.getBlockState(blockpos1.add(i, 0, j));
+                IBlockState iblockstate = worldIn.getBlockState(blockpos1.add(i, 0, j));
 
-                if (iblockstate.getBlock().canSustainPlant(world, blockpos1.add(i, 0, j), net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable) block)) {
+                if (iblockstate.getBlock().canSustainPlant(worldIn, blockpos1.add(i, 0, j), net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable) blockIn)) {
                     f1 = 1.0F;
 
-                    if (iblockstate.getBlock().isFertile(world, blockpos1.add(i, 0, j))) {
+                    if (iblockstate.getBlock().isFertile(worldIn, blockpos1.add(i, 0, j))) {
                         f1 = 3.0F;
                     }
                 }
@@ -115,13 +113,13 @@ public abstract class GrowableBase extends BlockBush implements IGrowable {
         BlockPos blockpos3 = pos.south();
         BlockPos blockpos4 = pos.west();
         BlockPos blockpos5 = pos.east();
-        boolean flag = block == world.getBlockState(blockpos4).getBlock() || block == world.getBlockState(blockpos5).getBlock();
-        boolean flag1 = block == world.getBlockState(blockpos2).getBlock() || block == world.getBlockState(blockpos3).getBlock();
+        boolean flag = blockIn == worldIn.getBlockState(blockpos4).getBlock() || blockIn == worldIn.getBlockState(blockpos5).getBlock();
+        boolean flag1 = blockIn == worldIn.getBlockState(blockpos2).getBlock() || blockIn == worldIn.getBlockState(blockpos3).getBlock();
 
         if (flag && flag1) {
             f /= 2.0F;
         } else {
-            boolean flag2 = block == world.getBlockState(blockpos4.north()).getBlock() || block == world.getBlockState(blockpos5.north()).getBlock() || block == world.getBlockState(blockpos5.south()).getBlock() || block == world.getBlockState(blockpos4.south()).getBlock();
+            boolean flag2 = blockIn == worldIn.getBlockState(blockpos4.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos5.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos5.south()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.south()).getBlock();
 
             if (flag2) {
                 f /= 2.0F;

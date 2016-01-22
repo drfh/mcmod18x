@@ -38,7 +38,7 @@ public class RicePlant extends GrowableBase {
 
     @Override
     public float getGrowRate(Block block, World world, BlockPos pos) {
-        return super.getGrowRate(block, world, pos) * 0.525F;
+        return super.getGrowRate(block, world, pos);
     }
 
     @Override
