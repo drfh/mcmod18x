@@ -17,6 +17,7 @@ import ruby.bamboo.block.Kitunebi;
 import ruby.bamboo.block.SakuraLog;
 import ruby.bamboo.block.SakuraPlank;
 import ruby.bamboo.block.Tatami;
+import ruby.bamboo.block.decoration.EnumDecoration;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.entity.EnumSlideDoor;
 import ruby.bamboo.item.FoldingFan;
@@ -58,7 +59,7 @@ public class BambooRecipes {
         // 袋
         addRecipe(getIS(Sack.class), "SSS", "WTW", "WWW", 'S', Items.string, 'T', tudura, 'W', getIS(Blocks.wool, 1, WILD));
         // たんす
-        addRecipe(getIS(JPChest.class), "WWW", "WTW", "WWW", 'W', "logWood", 'T', tudura);
+        addCircleRecipe(getIS(JPChest.class), tudura, "logWood");
         // たたみ
         addRecipe(getIS(Tatami.class), " S ", "STS", " S ", 'S', straw, 'T', tudura);
         // 引き戸類
@@ -74,6 +75,11 @@ public class BambooRecipes {
         addRecipe(getIS(Kitunebi.class, 6, 0), "XYX", "X#X", "XYX", 'X', getIS(Items.dye, 1, 4), 'Y', tudura, '#', Blocks.lit_pumpkin);
         addRecipe(getIS(Kitunebi.class, 6, 0), "XYX", "X#X", "XYX", 'X', Items.ender_pearl, 'Y', tudura, '#', Blocks.lit_pumpkin);
 
+        //******デコレーション
+        // 瓦
+        addCircleRecipe(getBlockIS(EnumDecoration.KAWARA.getModName(), 8, 0), tudura, Items.brick);
+        addSlabRecipe(getBlockIS(EnumDecoration.KAWARA.getModName() + EnumDecoration.SLAB, 12, 0), getBlockIS(EnumDecoration.KAWARA.getModName(), 1, 0));
+        addStairsRecipe(getBlockIS(EnumDecoration.KAWARA.getModName() + EnumDecoration.STAIRS, 4, 0), getBlockIS(EnumDecoration.KAWARA.getModName(), 1, 0));
     }
 
     /**
@@ -106,6 +112,37 @@ public class BambooRecipes {
      */
     public void registSeed() {
         MinecraftForge.addGrassSeed(getIS(RiceSeed.class), 10);
+    }
+
+    /**
+     * 囲みレシピ
+     * XXX
+     * X#X
+     * XXX
+     */
+    private void addCircleRecipe(ItemStack out, Object center, Object outer) {
+        addRecipe(out, "XXX", "X#X", "XXX", '#', center, 'X', outer);
+    }
+
+    /**
+     * 半ブロレシピ(復元含)
+     * XXX
+     * XXX
+     */
+    private void addSlabRecipe(ItemStack out, ItemStack itemStack) {
+        addRecipe(out, "XXX", "XXX", 'X', itemStack);
+        addRecipe(new ItemStack(itemStack.getItem(), 1, 0), "X", "X", 'X', out);
+    }
+
+    /**
+     * 階段レシピ(反転含)
+     * X
+     * XX
+     * XXX
+     */
+    private void addStairsRecipe(ItemStack out, Object material) {
+        addRecipe(out, "X  ", "XX ", "XXX", 'X', material);
+        addRecipe(out, "  X", " XX", "XXX", 'X', material);
     }
 
     private void addRecipe(ItemStack output, Object... params) {
@@ -173,5 +210,13 @@ public class BambooRecipes {
             throw new IllegalArgumentException("Illegal recipe!" + cls.getSimpleName());
         }
         return is;
+    }
+
+    private ItemStack getBlockIS(String name, int amo, int meta) {
+        return new ItemStack(Block.getBlockFromName(name), amo, meta);
+    }
+
+    private ItemStack getItemIS(String name, int amo, int meta) {
+        return new ItemStack(Item.getByNameOrId(name), amo, meta);
     }
 }

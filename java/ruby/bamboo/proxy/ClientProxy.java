@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
 import ruby.bamboo.block.ICustomState;
+import ruby.bamboo.block.decoration.DecorationClientFactory;
 import ruby.bamboo.core.Constants;
 import ruby.bamboo.core.DataManager;
 import ruby.bamboo.core.init.BambooData.BambooBlock.StateIgnore;
@@ -35,6 +36,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         super.preInit();
         this.registJson();
+        new DecorationClientFactory().register();
     }
 
     @Override
