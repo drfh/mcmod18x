@@ -12,8 +12,8 @@ public class InventorySack implements IInventory {
     private short meta;
     public ItemStack slot0;
 
-    public InventorySack(ItemStack itamStack) {
-        this.sack = itamStack;
+    public InventorySack(ItemStack itemStack) {
+        this.sack = itemStack;
     }
 
     @Override
